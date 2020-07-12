@@ -415,6 +415,40 @@ impl TableSchema {
             }
         }
     }
+
+    // write schema to String
+    pub fn write_schema(&self)->String{
+        let mut wrt = WriterForQvs20::new();
+        self.write_schema_to_writer(&mut wrt);
+        //return
+        wrt.move_output_string_out_of_struct()
+    }
+
+    /// write to writer
+    pub fn write_schema_to_writer(&self, wrt:&mut WriterForQvs20) {
+        wrt.write_string(&self.table_name);
+        wrt.write_string(&self.table_description);
+        wrt.write_delimiter();
+        for x in self.data_types.iter() {
+            wrt.write_string(&x.to_string());
+        }
+        wrt.write_delimiter();
+        for x in self.sub_table_schemas.iter() {
+            match x {
+                None => wrt.write_string(""),
+                Some(schema) => wrt.write_sub_table_schema(&schema),
+            }
+        }
+        wrt.write_delimiter();
+        for x in self.additional_properties.iter() {
+            wrt.write_string(&x);
+        }
+        wrt.write_delimiter();
+        for x in self.column_names.iter() {
+            wrt.write_string(&x);
+        }
+        wrt.write_delimiter();
+    }
 }
 
 #[cfg(test)]

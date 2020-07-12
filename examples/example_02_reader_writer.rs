@@ -1,12 +1,15 @@
-// example_01_naive_no_lib
+// example_02_reader_writer
 
-// region: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! A
+// region: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! B
 
-// endregion: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! A
+// endregion: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! B
 
+use qvs20::*;
 use rust_decimal::prelude::*;
 use std::fs;
 use unwrap::unwrap;
+use qvs20::WriterForQvs20;
+use qvs20::ReaderForQvs20;
 
 #[derive(Debug)]
 struct Qvs20Row {
@@ -15,20 +18,21 @@ struct Qvs20Row {
 }
 
 fn main() {
-    println!("---start example_01_naive_no_lib---");
+    println!("---start example_02_reader_writer---");
     // fill the vector with data
     let vec_of_rows = fill_sample_data();
 
     write_separate_files(&vec_of_rows);
+    /*
     write_one_file(&vec_of_rows);
 
-    read_with_find("cou_den1_rows.qvs20");
-    read_with_find("cou_den1.qvs20");
+    read_with_find("cou_den2_rows.qvs20");
+    read_with_find("cou_den2.qvs20");
 
-    read_with_regex("cou_den1_rows.qvs20");
-    read_with_regex("cou_den1.qvs20");
-
-    println!("---end example_01_naive_no_lib---");
+    read_with_regex("cou_den2_rows.qvs20");
+    read_with_regex("cou_den2.qvs20");
+*/
+    println!("---end example_02_reader_writer---");
 }
 
 fn fill_sample_data() -> Vec<Qvs20Row> {
@@ -54,51 +58,54 @@ fn fill_sample_data() -> Vec<Qvs20Row> {
 
 // write separate files for schema and rows - data
 fn write_separate_files(vec_of_rows: &Vec<Qvs20Row>) {
-    // Separate qvs20 schema file is simple to write manually in a string.
-    // Remember the rows meaning:
-    // 1. table name, description
-    // 2. data types of columns
-    // 3. sub table schema
-    // 4. additional properties
-    // 5. column names
-    // Nowhere extra spaces, delimiter is exactly \n.
-    // Escaping the 6 special characters ([,],\,\n,\r,\t) is very very rare here.
-    let schema_text = "[cou_den1][example with country population density]
-[String][Decimal]
-[][]
-[][]
-[Country][Density]
-";
+    // Separate qvs20 schema file
+    let mut wrt = WriterForQvs20::new();
+    wrt.write_string("cou_den2");
+    wrt.write_string("example with country population density");
+    wrt.write_delimiter();
+    // data types
+    wrt.write_string("String");
+    wrt.write_string("Decimal");
+    wrt.write_delimiter();
+    // write sub_table_schemas
+    wrt.write_string("");
+    wrt.write_string("");
+    wrt.write_delimiter();
+    // write additional_properties
+    wrt.write_string("");
+    wrt.write_string("");
+    wrt.write_delimiter();
+    // write column_names
+    wrt.write_string("Country");
+    wrt.write_string("Density");
+    wrt.write_delimiter();
+    let schema_text = wrt.move_output_string_out_of_struct();
     unwrap!(fs::write(
-        "sample_data/write/cou_den1_schema.qvs20",
+        "sample_data/write/cou_den2_schema.qvs20",
         &schema_text
     ));
-    println!("cou_den1_schema.qvs20:");
+    println!("cou_den2_schema.qvs20:");
     println!("{}", schema_text);
 
     // Separate file for qvs20 rows - data.
-    // We already know the data and we know there is no need
-    // for escaping the 6 special character.
-    let mut rows_text = String::with_capacity(200);
+    let mut wrt = WriterForQvs20::new();
     // First row is table name. Always end row with delimiter \n.
-    rows_text.push_str("[cou_den1]\n");
+    wrt.write_string("cou_den2");
+    wrt.write_delimiter();
     for row in vec_of_rows.iter() {
-        rows_text.push('[');
-        rows_text.push_str(&row.country);
-        rows_text.push(']');
-        rows_text.push('[');
-        rows_text.push_str(&row.density.to_string());
-        rows_text.push(']');
-        rows_text.push('\n');
+        wrt.write_string(&row.country);
+        wrt.write_string(&row.density.to_string());
+        wrt.write_delimiter();
     }
+    let rows_text = wrt.move_output_string_out_of_struct();
     unwrap!(fs::write(
-        "sample_data/write/cou_den1_rows.qvs20",
+        "sample_data/write/cou_den2_rows.qvs20",
         &rows_text
     ));
-    println!("cou_den1_rows.qvs20:");
+    println!("cou_den2_rows.qvs20:");
     println!("{}", rows_text);
 }
-
+/*
 // write one file for schema and rows - data
 fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
     // qvs20 schema file is simple to write manually in a string.
@@ -112,7 +119,7 @@ fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
     // Escaping the 6 special characters ([,],\,\n,\r,\t) is very very rare here.
     let mut text = String::with_capacity(200);
     text.push_str(
-        "[cou_den1][example with country population density]
+        "[cou_den2][example with country population density]
 [String][Decimal]
 [][]
 [][]
@@ -130,8 +137,8 @@ fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
         text.push(']');
         text.push('\n');
     }
-    unwrap!(fs::write("sample_data/write/cou_den1.qvs20", &text));
-    println!("cou_den1.qvs20:");
+    unwrap!(fs::write("sample_data/write/cou_den2.qvs20", &text));
+    println!("cou_den2.qvs20:");
     println!("{}", text);
 }
 
@@ -152,7 +159,7 @@ fn read_with_find(file_name: &str) {
     // we can use the first row to check if we opened the right file
     let mut pos_cursor = 0;
     let string_value = read_next_column(&text, &mut pos_cursor);
-    if string_value != "cou_den1" {
+    if string_value != "cou_den2" {
         panic!("wrong table name");
     }
 
@@ -300,9 +307,10 @@ fn check_table_name_and_jump_over_schema_with_regex(
             // The next line/row is data
         }
     }
-    if table_name != "cou_den1" {
+    if table_name != "cou_den2" {
         panic!("error: wrong table name.");
     }
 }
 
 // endregion: read with regex
+*/

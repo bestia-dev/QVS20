@@ -4,10 +4,9 @@
 
 Use this examples to learn how to use the qvs20 format and library.  
 
-[comment]: # (lmake_readme include start A)
+[comment]: # (lmake_md_to_doc_comments start A)
 
 ### 1. naive csv replacement
-
 
 We start with the naive replacement of csv. No library involved.  
 Super easy manually written code to write and read qvs20, but not "full standard".  
@@ -20,11 +19,16 @@ The first approach is with the find() method.
 The second approach is with regex.  
 `clear; cargo run --example example_01_naive_no_lib`  
 
-[comment]: # (lmake_readme include start A)
+[comment]: # (lmake_md_to_doc_comments end A)
+
+[comment]: # (lmake_md_to_doc_comments start B)
 
 ### 2. using reader and writer library
 
-It is wise to put repetitive code in a library. The first library is low level. Just read and write. Usage of libraries makes it possible to gradually enhance it with more complex data-types as needed. You just need to structure the code so it is extendable.  
+It is wise to put repetitive code in a library. The first library is low level. Just read and write. Usage of libraries makes it possible to gradually enhance it with more complex data-types as needed. The library encapsulate the code to parse and escape/unescape.  
+`clear; cargo run --example example_02_reader_writer`  
+
+[comment]: # (lmake_md_to_doc_comments end B)
 
 ### 3. using the qvs20_Table library
 

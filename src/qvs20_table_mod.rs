@@ -6,6 +6,7 @@
 //! It means that sometimes a change in the table does not dictate change in source code and compiling.
 
 use crate::qvs20_reader_mod::*;
+use crate::qvs20_writer_mod::*;
 use crate::qvs20_table_rows_mod::*;
 use crate::qvs20_table_schema_mod::*;
 
@@ -54,6 +55,15 @@ impl Table {
         let table = Table { schema, table_rows };
         //return
         Ok(table)
+    }
+
+    /// write to String
+    pub fn write_table(&self)->String {
+        let mut wrt = WriterForQvs20::new();
+        self.schema.write_schema_to_writer(&mut wrt);
+        self.table_rows.write_table_rows_to_writer(&mut wrt);
+        //return
+        wrt.move_output_string_out_of_struct()
     }
 }
 

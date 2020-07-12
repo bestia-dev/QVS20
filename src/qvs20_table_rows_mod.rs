@@ -6,6 +6,7 @@
 //! It means that sometimes a change in the table does not dictate change in source code and compiling.
 
 use crate::qvs20_reader_mod::*;
+use crate::qvs20_writer_mod::*;
 use crate::qvs20_table_schema_mod::*;
 use crate::src_loc;
 
@@ -592,6 +593,41 @@ impl TableRows {
         };
         //return
         Ok(value)
+    }
+    /// write rows to String
+    pub fn write_table_rows(&self)->String{
+        let mut wrt = WriterForQvs20::new();
+        self.write_table_rows_to_writer(&mut wrt);
+        //return
+        wrt.move_output_string_out_of_struct()
+    }
+    /// write rows to writer
+    pub fn write_table_rows_to_writer(&self, wrt:&mut WriterForQvs20) {
+            if wrt.output_is_empty() {
+                // when TableRows are in separate file from Schema
+                // the 1st row has one field: TableName
+                wrt.write_string(&self.table_name);
+                wrt.write_delimiter();
+            }
+            for row in self.rows.iter() {
+                for value in row.values.iter() {
+                    match value {
+                        Value::String(s) => wrt.write_string(&s),
+                        Value::Integer(i) => wrt.write_integer(*i),
+                        Value::Decimal(d) => wrt.write_decimal(*d),
+                        Value::Float(f) => wrt.write_float(*f),
+                        /*
+                        Bool(bool),
+                        DateTimeFixedOffset(DateTime<FixedOffset>),
+                        Date(NaiveDate),
+                        Time(NaiveTime),
+                        SubTable(TableRows),
+                        */
+                        _ => {}
+                    }
+                }
+                wrt.write_delimiter();
+            }
     }
 }
 

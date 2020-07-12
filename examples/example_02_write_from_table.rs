@@ -34,18 +34,15 @@ clear; cargo run --example example_02_write_from_table table03_sub_table.qvs20  
     let text = unwrap!(fs::read_to_string(&file_name));
     let table = read_qvs20(&text);
 
-    let mut output1 = String::with_capacity(1000);
-    write_qvs20_only_schema(&table, &mut output1);
+    let output1 = write_qvs20_only_schema(&table);
     // just print, instead of saving to a file
     println!("table_schema: \n{}", output1);
 
-    let mut output2 = String::with_capacity(1000);
-    write_qvs20_only_rows(&table, &mut output2);
+    let output2 = write_qvs20_only_rows(&table);
     // just print, instead of saving to a file
     println!("table_rows:\n{}", output2);
 
-    let mut output3 = String::with_capacity(1000);
-    write_qvs20_table(&table, &mut output3);
+    let output3 = write_qvs20_table(&table);
     // just print, instead of saving to a file
     println!("table:\n{}", output3);
 
@@ -59,17 +56,14 @@ fn read_qvs20(text: &str) -> Table {
     unwrap!(Table::from_qvs20_str_with_schema(text))
 }
 
-fn write_qvs20_only_schema(table: &Table, output: &mut String) {
-    let mut wrt = WriterForQvs20::new(output, &table.schema);
-    wrt.write_schema();
+fn write_qvs20_only_schema(table: &Table)->String {
+    table.schema.write_schema()
 }
 
-fn write_qvs20_only_rows(table: &Table, output: &mut String) {
-    let mut wrt = WriterForQvs20::new(output, &table.schema);
-    wrt.write_table_rows(&table.table_rows);
+fn write_qvs20_only_rows(table: &Table) -> String{
+    table.table_rows.write_table_rows()
 }
 
-fn write_qvs20_table(table: &Table, output: &mut String) {
-    let mut wrt = WriterForQvs20::new(output, &table.schema);
-    wrt.write_table(&table.table_rows);
+fn write_qvs20_table(table: &Table) -> String{
+    table.write_table()
 }

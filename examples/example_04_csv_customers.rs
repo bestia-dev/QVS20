@@ -74,8 +74,6 @@ fn main() {
     }
     let ns_before_qvs20 = ns_print(ns_before_serde, "  read_2 rdr.deserialize()");
 
-    // now write that in a qvs20 string
-    let mut qvs20_string = s!();
     // prepare schema manually
     let schema = unwrap!(TableSchema::schema_from_qvs20_str(
         r#"[customer records][big csv table]
@@ -86,8 +84,8 @@ fn main() {
 "#,
     ));
     // println!("{:#?}", schema);
-    let mut wrt = WriterForQvs20::new(&mut qvs20_string, &schema);
-    wrt.write_schema();
+    let mut wrt = WriterForQvs20::new();
+    schema.write_schema_to_writer(&mut wrt);
 
     for row in customer_records.iter() {
         wrt.write_string(&row.date_received);
@@ -111,6 +109,7 @@ fn main() {
         wrt.write_delimiter();
     }
     let ns_before_write = ns_print(ns_before_qvs20, "  write_1 to string qvs20");
+    let qvs20_string = wrt.move_output_string_out_of_struct();
     unwrap!(fs::write(
         "sample_data/write/customer_records.qvs20",
         &qvs20_string
