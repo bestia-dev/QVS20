@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Table","The Table type contains TableSchema and TableRows."]]});

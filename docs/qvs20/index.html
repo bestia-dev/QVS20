@@ -1,0 +1,378 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `qvs20` crate."><meta name="keywords" content="rust, rustlang, rust-lang, qvs20"><title>qvs20 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../qvs20/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><p class='location'>Crate qvs20</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all qvs20's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'qvs20', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/qvs20/lib.rs.html#2-515' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>qvs20</a></span></h1><div class='docblock'><h1 id="qvs20---modern-replacement-for-csv-for-the-year-2020" class="section-header"><a href="#qvs20---modern-replacement-for-csv-for-the-year-2020">QVS20 - Modern replacement for csv for the year 2020</a></h1>
+<p>sQuare brackets Separated Values 2020</p>
+<p><em><strong>version: 0.0.8  date: 2020-07-12 authors: Luciano Bestia</strong></em><br />
+<strong>Modern replacement for csv for the year 2020</strong></p>
+<p><a href="https://github.com/LucianoBestia/QVS20/"><img src="https://img.shields.io/badge/Lines_in_Rust-1514-green.svg" alt="Lines in Rust code" /></a>
+<a href="https://github.com/LucianoBestia/QVS20/"><img src="https://img.shields.io/badge/Lines_in_Doc_comments-580-blue.svg" alt="Lines in Doc comments" /></a>
+<a href="https://github.com/LucianoBestia/QVS20/"><img src="https://img.shields.io/badge/Lines_in_comments-204-purple.svg" alt="Lines in Comments" /></a>
+<a href="https://github.com/LucianoBestia/QVS20/"><img src="https://img.shields.io/badge/Lines_in_examples-993-yellow.svg" alt="Lines in examples" /></a>
+<a href="https://github.com/LucianoBestia/QVS20/"><img src="https://img.shields.io/badge/Lines_in_tests-811-orange.svg" alt="Lines in tests" /></a></p>
+<p>My proposed format for import/export of 2 dimensional database tables.</p>
+<h2 id="the-name-qvs20" class="section-header"><a href="#the-name-qvs20">The name QVS20</a></h2>
+<p><code>QVS</code> stands for &quot;sQuare brackets Separated Values&quot;.<br />
+The number <code>20</code> is the year of the first version: 2020.<br />
+Read phonetically as:</p>
+<ul>
+<li>International Phonetic Alphabet (IPA) [kʊs twɛnti]</li>
+<li>Americanist Phonetic Notation [koos twen-tee]</li>
+</ul>
+<p>Read pronunciation like <code>couscous</code> the North African dish or <code>Kuss</code> the German or Dutch words for Kiss.<br />
+<a href="https://en.wiktionary.org/wiki/kus">https://en.wiktionary.org/wiki/kus</a><br />
+A minor annoyance is that in Crimean Tatar kuş means bird or penis and in Kurdish kuş means fart.<br />
+But stay positive I say :-)</p>
+<h2 id="check-the-development-of-the-library-source-code" class="section-header"><a href="#check-the-development-of-the-library-source-code">Check the development of the library source code</a></h2>
+<p>Clone and try the examples.<br />
+The description is in the code and in &lt;DEVELOPMENTS.md&gt;.</p>
+<h2 id="text-format-for-tabular-data" class="section-header"><a href="#text-format-for-tabular-data">Text format for tabular data</a></h2>
+<p>Most databases are used to store information in tables - the tabular form of 2 dimensional data structure.<br />
+The structure is very simple to understand and visualize.<br />
+This data quite often need to be exported, transferred and imported between very different systems.<br />
+Binary transfer is hard to implement in heterogeneous systems.<br />
+Text transfer is slower and larger, but is universal for all computer systems and even human readable. The internet has good experience of that.<br />
+The text format is probably very good to compress/zip if needed.</p>
+<h2 id="machines-first---humans-second" class="section-header"><a href="#machines-first---humans-second">Machines first - Humans second</a></h2>
+<p><code>QVS20</code> is primarily intended to be write and read by computer code.<br />
+It is still possible to read and edit it manually.<br />
+All in all it is just a simple text.<br />
+But that is not very comfortable and it is absolutely not the primary goal.<br />
+So this is not a good format for config files.<br />
+Just for your info, no comments are allowed in the standard.<br />
+Only data.</p>
+<h2 id="database-table" class="section-header"><a href="#database-table">Database table</a></h2>
+<p>A database table is a structure that organizes data into rows and columns - forming a grid.<br />
+The rows run horizontally and represent each record.<br />
+The columns run vertically and represent a specific field.<br />
+A table has a specified number of columns.<br />
+Every column has a description what kind of data it represents.<br />
+The <code>QVS20</code> format can be used also for hierarchical data structures, but it does not shine there.<br />
+We already have <code>xml</code> and <code>json</code> for that type of data.<br />
+Today we need a format for (mostly) tabular data.</p>
+<h2 id="a-modern-replacement-for-csv" class="section-header"><a href="#a-modern-replacement-for-csv">A modern replacement for csv</a></h2>
+<p><code>csv</code> is the most used format to export/import tables.<br />
+But it is not even a official standard. Even the name is deceiving: CSV comma separated values. Sometimes the delimiter is not &quot;comma&quot;, but tab, semicolon,...<br />
+Every programmer has a different implementation.<br />
+There are a million small problems that makes its use problematic for different systems.<br />
+Though it works fine for import/export in the same system where the programmers made the same decisions.<br />
+Csv has the smallest footprint for a text format, but :</p>
+<ul>
+<li>what is the field delimiter: comma, semi-colon, colon, tab, ?</li>
+<li>what is the row delimiter: newline, CRLF, CR, LF?</li>
+<li>how to escape the delimiters inside the content?</li>
+<li>if we use the quotes as delimiters, how to escape the quotes?</li>
+<li>do we use the quotes everywhere or only on selected fields?</li>
+<li>what encoding is used for the file?</li>
+<li>how the decimal number are represented?</li>
+<li>how the date/time is represented?</li>
+<li>there is no standard for field definition.</li>
+<li>The data could come without column names.</li>
+</ul>
+<p>example of csv:</p>
+<pre><code class="language-txt">Date Received,Product Name,Sub Product,Issue,Sub Issue,Consumer Complaint Narrative,Company Public Response,Company,State Name,Zip Code,Tags,Consumer Consent Provided,Submitted via,Date Sent to Company,Company Response to Consumer,Timely Response,Consumer Disputed,Complaint ID
+2013-07-29,Consumer Loan,Vehicle loan,Managing the loan or lease,,,,Wells Fargo &amp; Company,VA,24540,,N/A,Phone,2013-07-30,Closed with explanation,Yes,No,468882
+2013-07-29,Bank \ account or service,Checking account,Using a debit or ATM card,,,,Wells Fargo &amp; Company,CA,95992,Older American,N/A,Web,2013-07-31,Closed with explanation,Yes,No,468889
+</code></pre>
+<p><code>xml</code> and <code>json</code> are great inter-system formats for hierarchically structured data, but not for tabular data.<br />
+They are terribly verbose for tables, because they repeat all the names for every row of data.<br />
+Imagine a table with a million rows. Most of this data is field names. Horror!</p>
+<p>example of json:</p>
+<pre><code class="language-json">[{
+        &quot;country&quot;: &quot;Afghanistan&quot;,
+        &quot;population&quot;: &quot;37172386&quot;
+    },
+    {
+        &quot;country&quot;: &quot;Albania&quot;,
+        &quot;population&quot;: &quot;2866376&quot;
+    },
+    {...
+</code></pre>
+<p>example of xml with elements:</p>
+<pre><code class="language-xml">    &lt;row&gt;
+        &lt;country&gt;Afghanistan&lt;/country&gt;
+        &lt;population&gt;37172386&lt;/population&gt;
+    &lt;/row&gt;
+    &lt;row&gt;
+    &lt;country&gt;Albania&lt;/country&gt;
+        &lt;population&gt;2866376&lt;/population&gt;
+    &lt;/row&gt;
+    &lt;row&gt;...
+</code></pre>
+<p>example of xml with attributes:</p>
+<pre><code class="language-xml">    &lt;row country=&quot;Afghanistan&quot; population=&quot;37172386&quot; /&gt;
+    &lt;row country=&quot;Albania&quot; population=&quot;2866376&quot; /&gt;
+    &lt;row ...
+</code></pre>
+<p>There is probably a lot more formats out there, but I cannot know them all.</p>
+<h2 id="why-square-brackets" class="section-header"><a href="#why-square-brackets">Why sQuare brackets</a></h2>
+<p>I think parsing is much easier and error resistent if the delimiters are different for start and for end.<br />
+It is the simplest rule that all the delimiters must always exist. No exceptions.<br />
+If we compare to <code>csv</code> it adds one additional delimiter, but that solves a lot of problems.<br />
+Why not quotes or apostrophes : they are the same delimiter for start and end.<br />
+Why not &lt;&gt; like xml? : If we have a lot of xml data, then all of these delimiters must be escaped.<br />
+Why not {}? : if we have a lot of json or code, there is a lot of characters to be escaped.<br />
+<code>sQuare brackets</code> [] are used in many places, but less then other symbols.<br />
+They are ascii7, just one byte in UTF8 and easy/fast to parse.<br />
+example of QVS20:</p>
+<pre><code class="language-QVS20">[City][Country][UN2018][CityPopulation][Area][MetropolitanPopulation]  
+[Tokyo][Japan][37400068][13515271][2191][37274000]  
+[Delhi][India][28514000][16753235][1484][29000000]  
+</code></pre>
+<h2 id="only-utf-8-encoding" class="section-header"><a href="#only-utf-8-encoding">Only utf-8 Encoding</a></h2>
+<p>There is a few different text encodings today. All come with good and bad properties.<br />
+In 2020 the choice to simplify most of the cases is <code>utf-8</code>.<br />
+It is much easier to maintain the source code for <code>QVS20</code> import/export for only that one encoding.<br />
+The utf-8 encoding is very efficient most of the times.<br />
+The Rust programming language uses utf-8 internally for the String type.<br />
+Utf-8 is quite complex.<br />
+There can be characters with 1, 2, 3, 4, 5, 6 bytes.<br />
+But the mastery of the encoding is that it <code>guarantees</code> that the same byte (number) for an ascii7 characters can never never be found anywhere else in any other character. It does not matter how much complicated is the 6 byte character. No one of that bytes can have a number less than 127.<br />
+It is a guarantee! Genius !<br />
+That means that we can approach an utf-8 file as a vector of bytes. Super simple, fast and easy. We can just ignore all the peculiarities of millions of unicode characters. Because we care only about our delimiters.<br />
+And they are all 100% ascii7.</p>
+<h2 id="visualization" class="section-header"><a href="#visualization">Visualization</a></h2>
+<p>This format is mostly made for machines. There is not superfluous data for visualization like spaces or tabs or newlines or comments.<br />
+It is still human readable, but not very comfortable without special visualizers/editors.<br />
+If your editor is clever and knows how to add a few spaces here and there, this format can become easy human readable.<br />
+This could be easily processed by all new editor/visualizer with extensions.<br />
+But remember, this is not the truth in the file.<br />
+We want small file sizes and there are no spaces in the file.<br />
+One problem of visualizations are long strings. They are hard to place on the screen in a tabular format to be nicely readable.<br />
+One idea to solve this &quot;problem&quot; is to add in the schema an optional field property <code>MaxVisualizeLength</code>. The visualizer should truncate the long string to achieve great readability. In most of the cases, we don't want to see the whole long long strings every time. Mostly the info in long long string is not really important.</p>
+<p>Example of visualization:</p>
+<pre><code class="language-QVS20">[City]  [Country] [UN2018]   [CityPopulation] [Area] [MetropolitanPopulation]  
+[Tokyo] [Japan]   [37400068] [13515271]       [2191] [37274000]  
+[Delhi] [India]   [28514000] [16753235]       [1484] [29000000]  
+</code></pre>
+<h2 id="common-data-types" class="section-header"><a href="#common-data-types">Common data types</a></h2>
+<p>A standard must be prepared for common data types and not leave them to different interpretations, because that can cause incompatibilities.<br />
+This data is mostly used in database tables, so the datatypes must be understandable in the database world. But the import/export utilities are write in languages that have different data types.<br />
+Here we need something in between that is understandable to both.<br />
+Here are the most used data types.<br />
+For exotic datatypes there is no need to define them in this standard.<br />
+Maybe in some next standard if that data type becomes really important.</p>
+<h2 id="data-type-string" class="section-header"><a href="#data-type-string">Data type String</a></h2>
+<p>Utf-8 enables to represent any unicode character.<br />
+We just need to be aware of this 4 special ascii7 characters:</p>
+<ul>
+<li>[ left square brackets</li>
+<li>] right square brackets</li>
+<li>LF new line</li>
+<li>\  Backslash character</li>
+</ul>
+<p>We can use the backslash character to escape the special characters:</p>
+<ul>
+<li>\\  Backslash character</li>
+<li>\[  Left Square Bracket</li>
+<li>\]  Right Square Bracket</li>
+<li>\n  New line</li>
+</ul>
+<p>We want to avoid undesirable editing characters in long strings, so we escape also these 2:</p>
+<ul>
+<li>\r  Carriage return</li>
+<li>\t  Tab</li>
+</ul>
+<p>So all together there are 6 ascii7 characters of interest to the parser and serializer.</p>
+<h2 id="data-type-integer" class="section-header"><a href="#data-type-integer">Data type Integer</a></h2>
+<p>Allowed characters: numbers and eventually a minus/plus before them.<br />
+[5]<br />
+[+5]<br />
+[-6]</p>
+<h2 id="data-type-decimal" class="section-header"><a href="#data-type-decimal">Data type Decimal</a></h2>
+<p>The decimal type is very important in databases and needs to be explicit.<br />
+The decimal is NOT the same as the float, because the float cannot contain an exact value ! Float makes it super problematic for any financial calculation or number comparison.  Use the Decimal type instead.<br />
+Allowed characters: numbers and decimal point and the minus/plus characters.<br />
+No space, no commas, no thousand delimiters, no currency symbols.<br />
+No binary, hexadecimal or other numbers are allowed here.</p>
+<p>[3]<br />
+[+3]<br />
+[-2]<br />
+[4.1]<br />
+[+4.1]<br />
+[-5.0]<br />
+[9.23872000]</p>
+<h2 id="data-type-float" class="section-header"><a href="#data-type-float">Data type Float</a></h2>
+<p>Avoid floats in &quot;real life&quot; scenarios. Use them only for scientific calculations. A classic problem with floats (inaccurate): <code>1.2 - 1.0 = 0.199999999999999996</code> ?!? This comparison <code>0.2 == (1.2 - 1.0)</code> returns <code>false</code> !?!<br />
+Allowed characters: numbers and decimal point and the minus/plus characters and the <code>e</code> exponent.<br />
+[2.99792458e8]<br />
+[+2.99792458e8]<br />
+[-2.99792458e8]<br />
+[2.99792458e-8]</p>
+<h2 id="type-bool" class="section-header"><a href="#type-bool">Type Bool</a></h2>
+<p><code>F</code> for false<br />
+<code>T</code> for true<br />
+It is case sensitive, uppercase only.<br />
+This characters are ascii7 and in utf-8 they use one byte only.</p>
+<p>[T]<br />
+[F]</p>
+<h2 id="data-type-date" class="section-header"><a href="#data-type-date">Data type Date</a></h2>
+<p>Only one format: <code>YYYY-MM-DD</code><br />
+All the parts are required.<br />
+No TimeZone or Fixed Offset.<br />
+[2002-09-24]</p>
+<h2 id="data-type-time" class="section-header"><a href="#data-type-time">Data type Time</a></h2>
+<p>Only one format: <code>hh:mm:ss.dddd</code><br />
+<code>.dddd</code> is optional. All the rest is required.<br />
+No TimeZone or Fixed Offset.<br />
+[23-59-59]<br />
+[23-59-59.12345]</p>
+<h2 id="data-type-datetime-with-fixedoffset" class="section-header"><a href="#data-type-datetime-with-fixedoffset">Data type DateTime with FixedOffset</a></h2>
+<p>Only one format: <code>YYYY-MM-DDThh:mm:ss.dddd+hh:mm</code><br />
+The FixedOffset is mandatory.<br />
+<code>.dddd</code> is optional. All the rest is required.<br />
+[2002-05-30T09:30:10.5]</p>
+<h2 id="data-type-binary" class="section-header"><a href="#data-type-binary">Data type binary</a></h2>
+<p>Binary data should be converted into Base64 and used as very long string.<br />
+This is not the best way to transfer big binary data.<br />
+The Base64 does not include any of the 4 special characters.<br />
+So the parser cannot be confused.</p>
+<h2 id="null" class="section-header"><a href="#null">Null</a></h2>
+<p>Null in database language means <code>absence of data</code> and is very important.<br />
+Empty brackets [] represent Null in <code>QVS20</code>.<br />
+For strings there is no difference between Null and EmptyString in <code>QVS20</code>.</p>
+<h2 id="data-type-subtable" class="section-header"><a href="#data-type-subtable">Data type SubTable</a></h2>
+<p>Inside one cell of the table is possible to insert a whole sub-table.<br />
+Just like that. Nothing changes, no special escaping, because we have start and end delimiters.<br />
+So we can represent also hierarchical data, if it is really needed.<br />
+Still the primary goal of the standard is tabular data.<br />
+Yes, but one tiny thing must change: the row delimiter of the sub-table is not \n anymore.<br />
+It is the number that represent the depth of the sub-table: 1, 2, 3,...<br />
+It must be only one byte. This format is not really great for hierarchies deeper than 9 levels.</p>
+<p>Example of CountryTable:</p>
+<pre><code class="language-QVS20">[Country][Population]  
+[Slovenia][2000000]  
+[Italia][60000000]  
+[Croatia][4000000]  
+</code></pre>
+<p>Now we want to insert the data of the cities, but hierarchically as a sub-table.<br />
+Example of CityDataTable for Slovenia:</p>
+<pre><code class="language-QVS20">[City][MetropolitanPopulation]  
+[Ljubljana][300000]  
+[Koper][30000]  
+</code></pre>
+<p>Together table and sub-table looks like this:<br />
+The sub-table row delimiter is changed to &quot;1&quot;.<br />
+For easy parsing, the sub-table starts with the new row delimiter.</p>
+<pre><code class="language-QVS20">[Country][CityDataSubTable][Population]  
+[Slovenia][1[Ljubljana][300000]1[Koper][30000]1][2000000]  
+[Italia][1[Milano][400000]1[Venezia][30000]1][60000]  
+</code></pre>
+<p>This is not very human readable, because the lack of spaces.<br />
+But you can visualize it like this:</p>
+<pre><code class="language-QVS20">[Country ] [CityDataSubTable      ] [Population]  
+[Slovenia] [1[Ljubljana][300000]1  
+             [Koper    ][ 30000]1 ] [   2000000]  
+[Italia  ] [1[Milano   ][400000]1  
+             [Venezia  ][ 30000]1 ] [  60000000]  
+...  
+</code></pre>
+<h2 id="row-delimiter-lf-and-sub-tables" class="section-header"><a href="#row-delimiter-lf-and-sub-tables">Row delimiter LF and sub-tables</a></h2>
+<p>The basic row delimiter is LF. Not CR, not CRLF, but exactly LF.<br />
+Every row must end with the row delimiter, especially the last row .<br />
+There is a small performance problem with sub-tables here.<br />
+Let me explain and come to the solution with this flow of thoughts.<br />
+For sequential reading of <code>QVS20</code> files the inserted sub-tables are not a problem. It works well.<br />
+If we read every field sequentially, we know when the sub-table starts and ends. Easy.
+But sometimes we want to go very fast line by line and read only the first field for filtering. Because of sub-tables, the next LF is not always the start of a new row.<br />
+<strong>Let's solve this problem.</strong><br />
+We can use again the fact that we know the different start and end delimiters.<br />
+So between the end field and the new row we can put a different <code>row delimiter</code>.<br />
+The first level row delimiter is conveniently LF.<br />
+For the first sub-table the row delimiter changes to the string <code>1</code>.<br />
+For the next depth level <code>2</code> and so on. The number is the depth of the sub-table.<br />
+In any moment it will be clear what is the row delimiter for that explicit sub-table.<br />
+Very important rule: every row, and the last row especially, must end with a row delimiter !<br />
+We must take care to limit the row delimiter to only one byte. It means there cannot be a sub-table nested deeper than 9 levels.  And that is fine for this type of tabular format.</p>
+<h2 id="schema" class="section-header"><a href="#schema">Schema</a></h2>
+<p>The Schema is write always in 5 mandatory rows:</p>
+<ul>
+<li>1st row - table name</li>
+<li>2st row - data types</li>
+<li>3nd row - sub table schemas</li>
+<li>4nd row - additional data</li>
+<li>5rd row - column names</li>
+</ul>
+<p>The Schema is mandatory.<br />
+It can be included in the same <code>QVS20</code> file or can exist in an external <code>QVS20</code> file.<br />
+That way is possible to have files with only data. Great for small packets of data.</p>
+<h3 id="schema-1st-row---table-name-and-description" class="section-header"><a href="#schema-1st-row---table-name-and-description">Schema 1st row - table name and description</a></h3>
+<p>It is great to recognize the data from inside the data itself.<br />
+The file name can change for various reasons and is not always coherent.<br />
+Only two fields are in the first row.<br />
+The table name is short and is used to assert that the separate TableRows file and the TableSchema file are really from the same Table.<br />
+The description can be long if is needed.</p>
+<h3 id="schema-2nd-row---data-types" class="section-header"><a href="#schema-2nd-row---data-types">Schema 2nd row - Data types</a></h3>
+<p>The most important information for the parser is the data type of the column.
+For example the strings must be unescaped, but the integers don't need it.
+Example of the 2nd row with data type:</p>
+<pre><code class="language-QVS20">[String][Integer][Decimal][Float][Date][Time][DateTime][Bool][SubTable]  
+</code></pre>
+<h3 id="schema-3rd-row---sub-table-schemas" class="section-header"><a href="#schema-3rd-row---sub-table-schemas">Schema 3rd row - Sub table schemas</a></h3>
+<p>SubTables schemas are write in the 3rd row.<br />
+For other column, the field is empty [].</p>
+<h3 id="schema-4th-row---additional-data" class="section-header"><a href="#schema-4th-row---additional-data">Schema 4th row - Additional data</a></h3>
+<p>Often programmers need to provide some additional info about the fields.<br />
+Every use-case will need different data here.<br />
+So this cannot be standardized.<br />
+This data is optional, but the row is mandatory. So the parsing is clear!<br />
+This additional data must be strings. And they must be correctly escaped in QVS20.<br />
+Like any other String.</p>
+<h3 id="schema-5th-row---column-names" class="section-header"><a href="#schema-5th-row---column-names">Schema 5th row - Column names</a></h3>
+<p>The 5th row of the schema contains the column names.<br />
+Example of 5th row with column names:</p>
+<pre><code class="language-QVS20">[City][Country][UN2018][CityPopulation][Area][MetropolitanPopulation][SomeDecimalNumber][SomeDate[SomeTime][SomeDateTime][SomeBool]  
+</code></pre>
+<h2 id="tablerows" class="section-header"><a href="#tablerows">TableRows</a></h2>
+<p>The actual data is write in TableRows. This can be in a separate file or in the same file after the schema.</p>
+<h3 id="tablerows-1st-row---table-name---only-when-in-separate-file-without-schema" class="section-header"><a href="#tablerows-1st-row---table-name---only-when-in-separate-file-without-schema">TableRows 1st row - table name - only when in separate file without Schema</a></h3>
+<p>When TableRows are in separate file, the first row contains only one field: the TableName.<br />
+So we can check if the Schema and the Rows are from the same table when they are in separate files.<br />
+When the schema and table are together in the same file, this row is not needed.</p>
+<h2 id="versions" class="section-header"><a href="#versions">Versions</a></h2>
+<p>Versions are named by the year. <code>QVS20</code> is the version from year 2020.<br />
+If one day we make a new version we use the year of that version.<br />
+For example in 2042 we will have the standard version and file extension<br />
+<code>QVS42</code>.</p>
+<h2 id="file-extension" class="section-header"><a href="#file-extension">File extension</a></h2>
+<p>I want the file extension to be specific for the version of the standard.<br />
+File extension and standard name are the same: <code>*.QVS20</code><br />
+It also looks unique and I hope nobody else will use it for something else.</p>
+<h2 id="implementation-in-rust" class="section-header"><a href="#implementation-in-rust">Implementation in Rust</a></h2>
+<p>A proposed standard without implementations is boring.<br />
+In this project I also built rust libraries for QVS20 and published them on GitHub and crates.io.<br />
+For rust developers they will have native libraries with source code.<br />
+Rust is the best language to compile to WebAssembly/Wasm. So I will do that too.<br />
+I will enjoy to have a <code>QVS20</code> parser inside the browser, to efficiently consume tabular data received from the server.<br />
+I expect that authors of existent <code>csv parsers</code> will make an effort and create a similar library for <code>QVS20</code> in different languages. I am sure they can make it very very performant.</p>
+<h2 id="popularity" class="section-header"><a href="#popularity">Popularity</a></h2>
+<p>Sure the biggest problem for a standard is the popularization !<br />
+If nobody uses it, than it is unusable. More people use it and more usable it becomes.<br />
+Popularity is a vicious cycle. With time it accelerates - in either directions: up or down.
+Integration in database tools, spreadsheet apps and client-server frameworks would boost the usability.<br />
+It is really important for the standard to be popular.<br />
+I hope the standard will be interesting to many and they will organically spread the word.  </p>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table><tr class='module-item'><td><a class="mod" href="qvs20_reader_mod/index.html" title='qvs20::qvs20_reader_mod mod'>qvs20_reader_mod</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="mod" href="qvs20_table_mod/index.html" title='qvs20::qvs20_table_mod mod'>qvs20_table_mod</a></td><td class='docblock-short'><p>The table structure is very flexible, because it is defined in runtime.
+A lot of times the table is used just as an intermediary,
+and don't need a fixed Rust struct in compile time.
+It means that sometimes a change in the table does not dictate change in source code and compiling.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="qvs20_table_rows_mod/index.html" title='qvs20::qvs20_table_rows_mod mod'>qvs20_table_rows_mod</a></td><td class='docblock-short'><p>The table structure is very flexible, because it is defined in runtime.
+A lot of times the table is used just as an intermediary,
+and don't need a fixed Rust struct in compile time.
+It means that sometimes a change in the table does not dictate change in source code and compiling.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="qvs20_table_schema_mod/index.html" title='qvs20::qvs20_table_schema_mod mod'>qvs20_table_schema_mod</a></td><td class='docblock-short'><p>The table structure is very flexible, because it is defined in runtime.
+A lot of times the table is used just as an intermediary,
+and don't need a fixed Rust struct in compile time.
+It means that sometimes a change in the table does not dictate change in source code and compiling.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="qvs20_writer_mod/index.html" title='qvs20::qvs20_writer_mod mod'>qvs20_writer_mod</a></td><td class='docblock-short'></td></tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table><tr class='module-item'><td><a class="macro" href="macro.err_trim.html" title='qvs20::err_trim macro'>err_trim</a></td><td class='docblock-short'><p>trim start of error for concatenation</p>
+</td></tr><tr class='module-item'><td><a class="macro" href="macro.s.html" title='qvs20::s macro'>s</a></td><td class='docblock-short'><p>short macro <code>s!()</code> for &amp;str.to_string or format!().
+because that is so common.
+Equivalents: s!(), x.to_string(), x.to_owned(),String::new(), format!()...</p>
+</td></tr><tr class='module-item'><td><a class="macro" href="macro.src_loc.html" title='qvs20::src_loc macro'>src_loc</a></td><td class='docblock-short'></td></tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.ReaderForQvs20.html" title='qvs20::ReaderForQvs20 struct'>ReaderForQvs20</a></td><td class='docblock-short'><p>ReaderForQvs20</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.Table.html" title='qvs20::Table struct'>Table</a></td><td class='docblock-short'><p>The Table type contains TableSchema and TableRows.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.TableRows.html" title='qvs20::TableRows struct'>TableRows</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.TableSchema.html" title='qvs20::TableSchema struct'>TableSchema</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.WriterForQvs20.html" title='qvs20::WriterForQvs20 struct'>WriterForQvs20</a></td><td class='docblock-short'></td></tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table><tr class='module-item'><td><a class="enum" href="enum.Qvs20Error.html" title='qvs20::Qvs20Error enum'>Qvs20Error</a></td><td class='docblock-short'></td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table><tr class='module-item'><td><a class="fn" href="fn.remove_src_loc.html" title='qvs20::remove_src_loc fn'>remove_src_loc</a></td><td class='docblock-short'><p>src_loc is changing every time I edit the code
+then all the error messages are different and the tests must be changed
+I will remove src loc for error testing</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "qvs20";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

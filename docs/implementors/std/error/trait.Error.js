@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["qvs20"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/error/trait.Error.html\" title=\"trait std::error::Error\">Error</a> for <a class=\"enum\" href=\"qvs20/enum.Qvs20Error.html\" title=\"enum qvs20::Qvs20Error\">Qvs20Error</a>","synthetic":false,"types":["qvs20::qvs20_reader_mod::Qvs20Error"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

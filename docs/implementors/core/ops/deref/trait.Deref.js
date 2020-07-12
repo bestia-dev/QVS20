@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["qvs20"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html\" title=\"trait core::ops::deref::Deref\">Deref</a> for <a class=\"struct\" href=\"qvs20/qvs20_reader_mod/struct.REGEX_SRC_LOC.html\" title=\"struct qvs20::qvs20_reader_mod::REGEX_SRC_LOC\">REGEX_SRC_LOC</a>","synthetic":false,"types":["qvs20::qvs20_reader_mod::REGEX_SRC_LOC"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

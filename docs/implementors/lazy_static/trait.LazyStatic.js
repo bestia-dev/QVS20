@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["qvs20"] = [{"text":"impl <a class=\"trait\" href=\"https://docs.rs/lazy_static/1.4.0/lazy_static/trait.LazyStatic.html\" title=\"trait lazy_static::LazyStatic\">LazyStatic</a> for <a class=\"struct\" href=\"qvs20/qvs20_reader_mod/struct.REGEX_SRC_LOC.html\" title=\"struct qvs20::qvs20_reader_mod::REGEX_SRC_LOC\">REGEX_SRC_LOC</a>","synthetic":false,"types":["qvs20::qvs20_reader_mod::REGEX_SRC_LOC"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
