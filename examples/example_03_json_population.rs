@@ -35,7 +35,6 @@ fn main() {
     // this is faster, but not good  562ms: let br = unwrap!(BufReader::new(File::open(path)));unwrap!(serde_json::from_reader(br))
     // Read the whole file in a string and parse is the fastest: 55ms
 
-
     // region: read from json file to vec struct
     let ns_1 = ns_start();
     let json_text = unwrap!(fs::read_to_string(
