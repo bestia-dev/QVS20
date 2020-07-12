@@ -52,7 +52,7 @@ impl Customers {
         unwrap!(schema.read_schema(&mut rdr));
 
         let mut active_row = 0;
-        while rdr.peek_next_is_not_eof() {
+        while !rdr.peek_next_is_eof() {
             let row = unwrap!(Self::get_one_data_row(&mut rdr, &schema));
             self.vec.push(row);
             active_row += 1;
@@ -69,7 +69,7 @@ impl Customers {
             two: rdr.next_integer()? as i32,
             three: rdr.next_string()?,
         };
-        rdr.next_row_delimiter()?;
+        rdr.next_row_delimiter(b'\n')?;
         //return
         Ok(customer)
     }

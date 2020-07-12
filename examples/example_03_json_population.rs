@@ -46,7 +46,7 @@ fn main() {
     // endregion: read from json file to vec struct
 
     // now write that in a qvs20 string and file
-    
+
     write_qvs20_schema_and_rows_to_file(&country_population);
 
     let ns_3 = ns_start();
@@ -67,9 +67,7 @@ use qvs20::*;
 
 /// manually create schema and loop through data to serialize qvs20 to string from struct vector
 /// TODO: use derive later
-fn write_qvs20_schema_and_rows_to_file(
-    country_population: &Vec<CountryPopulation>,
-) {
+fn write_qvs20_schema_and_rows_to_file(country_population: &Vec<CountryPopulation>) {
     let ns_1 = ns_start();
     // prepare schema manually into string
     let schema = unwrap!(TableSchema::schema_from_qvs20_str(
@@ -90,7 +88,7 @@ fn write_qvs20_schema_and_rows_to_file(
         wrt.write_delimiter();
     }
     let ns_2 = ns_print(ns_1, "  write_1 to string qvs20");
-    let output = wrt.move_output_string_out_of_struct();
+    let output = wrt.return_and_finish();
     // write string to file
     unwrap!(fs::write(
         "sample_data/write/country_population.qvs20",

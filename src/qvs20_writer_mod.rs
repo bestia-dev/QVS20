@@ -5,7 +5,7 @@ use crate::qvs20_table_schema_mod::*;
 use rust_decimal::prelude::*;
 //use unwrap::unwrap;
 
-pub struct WriterForQvs20{
+pub struct WriterForQvs20 {
     // writes to utf8 String
     output: String,
     column: usize,
@@ -17,20 +17,21 @@ impl WriterForQvs20 {
     pub fn new() -> Self {
         Self::new_with_delimiter('\n')
     }
-    pub fn new_with_delimiter(row_delimiter:char) -> Self {
+    pub fn new_with_delimiter(row_delimiter: char) -> Self {
         //return
         WriterForQvs20 {
-            output:s!(),
+            output: s!(),
             column: 0,
             row_delimiter,
         }
     }
-    pub fn output_is_empty(&self)-> bool{
+    pub fn output_is_empty(&self) -> bool {
         self.output.is_empty()
     }
     /// Move the String out of the writer struct, that will be soon dropped.
     /// Never use it more than once !
-    pub fn move_output_string_out_of_struct(&mut self)-> String{
+    /// I don't know a Rust technic to enforce that.
+    pub fn return_and_finish(&mut self) -> String {
         // the Rust pattern to move out a struct field is to use mem:: replace
         // because of the strict ownership
         // it is then replaced with the new value. So never use it more than once!
@@ -78,11 +79,18 @@ impl WriterForQvs20 {
         //sub table start with delimiter
         wrt.write_delimiter();
         schema.write_schema_to_writer(&mut wrt);
-        let output_sub_schema = wrt.move_output_string_out_of_struct();
+        let output_sub_schema = wrt.return_and_finish();
 
         self.output.push_str(&output_sub_schema);
         self.output.push(']');
         self.column += 1;
+    }
+    /// write a vector of string as one row
+    pub fn write_vec_of_string_as_row(&mut self, row_data: &Vec<&str>) {
+        for data in row_data.iter() {
+            self.write_string(data);
+        }
+        self.write_delimiter();
     }
     /// escape the 6 special characters \\, \[, \], \n, \r, \t
     /// all this characters are ascii7
@@ -136,15 +144,15 @@ mod test {
         wrt.write_string("o\\n[e]");
         wrt.write_string("t\nw\to\r");
         wrt.write_delimiter();
-        let output = wrt.move_output_string_out_of_struct();
+        let output = wrt.return_and_finish();
         assert_eq!(output, "[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n");
     }
     #[test]
     pub fn t02_write_schema() {
         let schema = TableSchema::new_simple_strings(3);
         let mut wrt = WriterForQvs20::new();
-        schema.write_schema_to_writer(& mut wrt);
-        let output = wrt.move_output_string_out_of_struct();
+        schema.write_schema_to_writer(&mut wrt);
+        let output = wrt.return_and_finish();
         assert_eq!(
             output,
             "[t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n"
@@ -154,12 +162,12 @@ mod test {
     pub fn t03_write_schema_and_data() {
         let schema = TableSchema::new_simple_strings(3);
         let mut wrt = WriterForQvs20::new();
-        schema.write_schema_to_writer(& mut wrt);
+        schema.write_schema_to_writer(&mut wrt);
         wrt.write_string("three");
         wrt.write_string("o\\n[e]");
         wrt.write_string("t\nw\to\r");
         wrt.write_delimiter();
-        let output = wrt.move_output_string_out_of_struct();
+        let output = wrt.return_and_finish();
         assert_eq!(output, "[t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n");
     }
 }

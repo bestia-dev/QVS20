@@ -109,7 +109,7 @@ fn main() {
         wrt.write_delimiter();
     }
     let ns_before_write = ns_print(ns_before_qvs20, "  write_1 to string qvs20");
-    let qvs20_string = wrt.move_output_string_out_of_struct();
+    let qvs20_string = wrt.return_and_finish();
     unwrap!(fs::write(
         "sample_data/write/customer_records.qvs20",
         &qvs20_string

@@ -417,15 +417,15 @@ impl TableSchema {
     }
 
     // write schema to String
-    pub fn write_schema(&self)->String{
+    pub fn write_schema(&self) -> String {
         let mut wrt = WriterForQvs20::new();
         self.write_schema_to_writer(&mut wrt);
         //return
-        wrt.move_output_string_out_of_struct()
+        wrt.return_and_finish()
     }
 
     /// write to writer
-    pub fn write_schema_to_writer(&self, wrt:&mut WriterForQvs20) {
+    pub fn write_schema_to_writer(&self, wrt: &mut WriterForQvs20) {
         wrt.write_string(&self.table_name);
         wrt.write_string(&self.table_description);
         wrt.write_delimiter();

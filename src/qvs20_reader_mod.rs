@@ -59,6 +59,8 @@ pub struct ReaderForQvs20<'a> {
     last_new_line_cursor_pos: usize,
     /// row pos
     row: usize,
+    /// row delimiter
+    row_delimiter: u8,
 }
 
 /// internal enum
@@ -104,8 +106,13 @@ impl<'a> ReaderForQvs20<'a> {
         ReaderForQvs20 {
             input,
             file_name_for_error_handling: s!("./file.qvs20"),
+            // default row_delimiter
+            row_delimiter: b'\n',
             ..Default::default()
         }
+    }
+    pub fn set_row_delimiter(&mut self, row_delimiter: u8) {
+        self.row_delimiter = row_delimiter;
     }
     /// errors msg have file_name:row:column position
     pub fn error_pos(&self) -> String {
@@ -132,19 +139,27 @@ impl<'a> ReaderForQvs20<'a> {
         }
     }
     /// peek if next character will be eof
-    pub fn peek_next_is_not_eof(&self) -> bool {
+    pub fn peek_next_is_eof(&self) -> bool {
         if self.cursor_pos + 1 >= self.input.len() {
-            false
-        } else {
             true
+        } else {
+            false
         }
     }
     /// peek if next character will be end of sub_table
-    pub fn peek_next_is_not_end_of_sub_table(&self) -> bool {
+    pub fn peek_next_is_end_of_sub_table(&self) -> bool {
         if self.input[self.cursor_pos + 1] == b']' {
-            false
-        } else {
             true
+        } else {
+            false
+        }
+    }
+    /// peek if next character will be row_delimiter
+    pub fn peek_next_is_row_delimiter(&self) -> bool {
+        if self.input[self.cursor_pos] == self.row_delimiter {
+            true
+        } else {
+            false
         }
     }
     /// unescape the qvs20 special 6 characters
@@ -281,7 +296,7 @@ impl<'a> ReaderForQvs20<'a> {
         }
     }
 
-    /// get next row_delimiter
+    /// get next row_delimiter with check
     pub fn next_row_delimiter(&mut self) -> Result<(), Qvs20Error> {
         let result = match self.next() {
             Some(p) => p,
@@ -300,13 +315,36 @@ impl<'a> ReaderForQvs20<'a> {
             }
         };
         match token {
-            Token::RowDelimiter(_r) => Ok(()),
+            Token::RowDelimiter(r) => {
+                if r != self.row_delimiter {
+                    return Err(Qvs20Error::Error {
+                        msg: format!(
+                            "expected row_delimiter {}, but found {} {}",
+                            self.row_delimiter,
+                            r,
+                            src_loc!(),
+                        ),
+                    });
+                } else {
+                    return Ok(());
+                }
+            }
             _ => {
                 return Err(Qvs20Error::Error {
                     msg: format!("expected row_delimiter not found {}", src_loc!(),),
                 })
             }
         }
+    }
+    /// next row as vec of string
+    pub fn next_row_as_vec_of_string(&mut self) -> Result<Vec<String>, Qvs20Error> {
+        let mut vec_of_string = vec![];
+        while !self.peek_next_is_row_delimiter() {
+            vec_of_string.push(unwrap!(self.next_string()));
+        }
+        unwrap!(self.next_row_delimiter());
+        //return
+        Ok(vec_of_string)
     }
 }
 

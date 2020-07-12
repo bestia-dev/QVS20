@@ -80,7 +80,7 @@ mod qvs20_generated {
 
             let mut _active_row = 0;
             //while
-            while rdr.peek_next_is_not_eof() {
+            while !rdr.peek_next_is_eof() {
                 // data row
                 let row = unwrap!(Self::get_one_data_row(&mut rdr, &schema));
                 self.vec.push(row);
@@ -115,7 +115,7 @@ mod qvs20_generated {
                 consumer_disputed: rdr.next_string()?,
                 complaint_id: rdr.next_integer()? as i32,
             };
-            rdr.next_row_delimiter()?;
+            rdr.next_row_delimiter(b'\n')?;
             //return
             Ok(customer_record)
         }

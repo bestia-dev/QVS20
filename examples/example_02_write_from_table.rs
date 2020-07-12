@@ -56,14 +56,14 @@ fn read_qvs20(text: &str) -> Table {
     unwrap!(Table::from_qvs20_str_with_schema(text))
 }
 
-fn write_qvs20_only_schema(table: &Table)->String {
+fn write_qvs20_only_schema(table: &Table) -> String {
     table.schema.write_schema()
 }
 
-fn write_qvs20_only_rows(table: &Table) -> String{
+fn write_qvs20_only_rows(table: &Table) -> String {
     table.table_rows.write_table_rows()
 }
 
-fn write_qvs20_table(table: &Table) -> String{
+fn write_qvs20_table(table: &Table) -> String {
     table.write_table()
 }
