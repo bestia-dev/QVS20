@@ -9,7 +9,7 @@ use std::fs;
 use unwrap::unwrap;
 
 #[derive(Debug)]
-struct Qvs20Row {
+struct CouDenRow {
     country: String,
     density: Decimal,
 }
@@ -17,10 +17,10 @@ struct Qvs20Row {
 fn main() {
     println!("---start example_01_naive_no_lib---");
     // fill the vector with data
-    let vec_of_rows = fill_sample_data();
+    let vec_of_cou_den_rows = fill_sample_data();
 
-    write_separate_files(&vec_of_rows);
-    write_one_file(&vec_of_rows);
+    write_separate_files(&vec_of_cou_den_rows);
+    write_one_file(&vec_of_cou_den_rows);
 
     read_with_find("cou_den1_rows.qvs20");
     read_with_find("cou_den1.qvs20");
@@ -31,21 +31,21 @@ fn main() {
     println!("---end example_01_naive_no_lib---");
 }
 
-fn fill_sample_data() -> Vec<Qvs20Row> {
+fn fill_sample_data() -> Vec<CouDenRow> {
     vec![
-        Qvs20Row {
+        CouDenRow {
             country: "Slovenia".to_string(),
             density: unwrap!(Decimal::from_str("102.6398595")),
         },
-        Qvs20Row {
+        CouDenRow {
             country: "Italy".to_string(),
             density: unwrap!(Decimal::from_str("205.4507479")),
         },
-        Qvs20Row {
+        CouDenRow {
             country: "Falkland Islands".to_string(),
             density: unwrap!(Decimal::from_str("0.28")),
         },
-        Qvs20Row {
+        CouDenRow {
             country: "Macao".to_string(),
             density: unwrap!(Decimal::from_str("20777.50026")),
         },
@@ -53,7 +53,7 @@ fn fill_sample_data() -> Vec<Qvs20Row> {
 }
 
 // write separate files for schema and rows - data
-fn write_separate_files(vec_of_rows: &Vec<Qvs20Row>) {
+fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Separate qvs20 schema file is simple to write manually in a string.
     // Remember the rows meaning:
     // 1. table name, description
@@ -82,7 +82,7 @@ fn write_separate_files(vec_of_rows: &Vec<Qvs20Row>) {
     let mut rows_text = String::with_capacity(200);
     // First row is table name. Always end row with delimiter \n.
     rows_text.push_str("[cou_den1]\n");
-    for row in vec_of_rows.iter() {
+    for row in vec_of_cou_den_rows.iter() {
         rows_text.push('[');
         rows_text.push_str(&row.country);
         rows_text.push(']');
@@ -100,7 +100,7 @@ fn write_separate_files(vec_of_rows: &Vec<Qvs20Row>) {
 }
 
 // write one file for schema and rows - data
-fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
+fn write_one_file(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // qvs20 schema file is simple to write manually in a string.
     // Remember the rows meaning:
     // 1. table name, description
@@ -121,7 +121,7 @@ fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
     );
     // qvs20 rows - data.
     // We know the data and that there is no need for escaping the 6 special character.
-    for row in vec_of_rows.iter() {
+    for row in vec_of_cou_den_rows.iter() {
         text.push('[');
         text.push_str(&row.country);
         text.push(']');
@@ -140,7 +140,7 @@ fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
 /// use find() for the next delimiter
 /// this fn is calling 3 helper functions
 fn read_with_find(file_name: &str) {
-    let mut vec_of_rows: Vec<Qvs20Row> = vec![];
+    let mut vec_of_cou_den_rows: Vec<CouDenRow> = vec![];
     // We don't need to use the schema file in our super simple code.
     // But we (the developers) have to read the schema file and learn the structure.
     // We don't need any other information, just read the schema file.
@@ -164,10 +164,10 @@ fn read_with_find(file_name: &str) {
         let density = read_next_column(&text, &mut pos_cursor);
         let density = unwrap!(Decimal::from_str(&density));
         read_delimiter(&text, &mut pos_cursor);
-        vec_of_rows.push(Qvs20Row { country, density });
+        vec_of_cou_den_rows.push(CouDenRow { country, density });
     }
     println!("Parsed from file with find: {}", file_name);
-    dbg!(vec_of_rows);
+    dbg!(vec_of_cou_den_rows);
 }
 
 /// The first column of the first row is always the table_name.
@@ -242,7 +242,7 @@ fn read_delimiter(text: &str, pos_cursor: &mut usize) {
 use regex::Regex;
 /// read using regex
 fn read_with_regex(file_name: &str) {
-    let mut vec_of_rows: Vec<Qvs20Row> = vec![];
+    let mut vec_of_cou_den_rows: Vec<CouDenRow> = vec![];
     // We don't need to use the schema file in our super simple code.
     // But we (the developers) have to read the schema file and learn the structure.
     // We don't need any other information, just read the schema file.
@@ -265,11 +265,11 @@ fn read_with_regex(file_name: &str) {
             let country = unwrap!(cap.get(1)).as_str().to_string();
             let density = unwrap!(cap.get(2)).as_str();
             let density = unwrap!(Decimal::from_str(&density));
-            vec_of_rows.push(Qvs20Row { country, density });
+            vec_of_cou_den_rows.push(CouDenRow { country, density });
         }
     }
     println!("Parsed from file with regex: {}", file_name);
-    dbg!(vec_of_rows);
+    dbg!(vec_of_cou_den_rows);
 }
 
 /// The first column of the first row is always the table_name.

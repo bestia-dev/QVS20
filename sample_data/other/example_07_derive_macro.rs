@@ -3,15 +3,15 @@
 // clear; cargo expand --example example_07_derive_macro
 
 /*
-use qvs20_derive::{Qvs20Row, Qvs20Table};
+use qvs20_derive::{CouDenRow, Qvs20Table};
 
 #[derive(Qvs20Table)]
 struct Customers {
-    #[Qvs20Rows]
+    #[CouDenRows]
     vec: Vec<Customer>,
 }
 
-#[derive(Qvs20Row)]
+#[derive(CouDenRow)]
 struct Customer {
     one: i32,
     two: i32,

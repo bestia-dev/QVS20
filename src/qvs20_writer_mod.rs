@@ -138,7 +138,6 @@ mod test {
 
     #[test]
     pub fn t01_write_data_string_escaped() {
-        let schema = TableSchema::new_simple_strings(3);
         let mut wrt = WriterForQvs20::new();
         wrt.write_string("three");
         wrt.write_string("o\\n[e]");

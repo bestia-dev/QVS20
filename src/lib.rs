@@ -510,6 +510,8 @@ pub use qvs20_reader_mod::remove_src_loc;
 pub use qvs20_reader_mod::Qvs20Error;
 pub use qvs20_reader_mod::ReaderForQvs20;
 pub use qvs20_table_mod::Table;
+pub use qvs20_table_rows_mod::Row;
 pub use qvs20_table_rows_mod::TableRows;
+pub use qvs20_table_rows_mod::Value;
 pub use qvs20_table_schema_mod::TableSchema;
 pub use qvs20_writer_mod::WriterForQvs20;

@@ -12,7 +12,7 @@ use std::fs;
 use unwrap::unwrap;
 
 #[derive(Debug)]
-struct Qvs20Row {
+struct CouDenRow {
     country: String,
     density: Decimal,
 }
@@ -20,10 +20,10 @@ struct Qvs20Row {
 fn main() {
     println!("---start example_02_reader_writer---");
     // fill the vector with data
-    let vec_of_rows = fill_sample_data();
+    let vec_of_cou_den_rows = fill_sample_data();
 
-    write_separate_files(&vec_of_rows);
-    write_one_file(&vec_of_rows);
+    write_separate_files(&vec_of_cou_den_rows);
+    write_one_file(&vec_of_cou_den_rows);
 
     read_with_reader("cou_den2_rows.qvs20");
     read_with_reader("cou_den2.qvs20");
@@ -31,21 +31,21 @@ fn main() {
     println!("---end example_02_reader_writer---");
 }
 
-fn fill_sample_data() -> Vec<Qvs20Row> {
+fn fill_sample_data() -> Vec<CouDenRow> {
     vec![
-        Qvs20Row {
+        CouDenRow {
             country: "Slovenia".to_string(),
             density: unwrap!(Decimal::from_str("102.6398595")),
         },
-        Qvs20Row {
+        CouDenRow {
             country: "Italy".to_string(),
             density: unwrap!(Decimal::from_str("205.4507479")),
         },
-        Qvs20Row {
+        CouDenRow {
             country: "Falkland Islands".to_string(),
             density: unwrap!(Decimal::from_str("0.28")),
         },
-        Qvs20Row {
+        CouDenRow {
             country: "Macao".to_string(),
             density: unwrap!(Decimal::from_str("20777.50026")),
         },
@@ -53,7 +53,7 @@ fn fill_sample_data() -> Vec<Qvs20Row> {
 }
 
 // write separate files for schema and rows - data
-fn write_separate_files(vec_of_rows: &Vec<Qvs20Row>) {
+fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Separate qvs20 schema file
     // return String from block, so the writer is dropped soon and correctly
     let schema_text = {
@@ -87,7 +87,7 @@ fn write_separate_files(vec_of_rows: &Vec<Qvs20Row>) {
         // First row is table name. Always end row with delimiter \n.
         wrt.write_string("cou_den2");
         wrt.write_delimiter();
-        for row in vec_of_rows.iter() {
+        for row in vec_of_cou_den_rows.iter() {
             wrt.write_string(&row.country);
             wrt.write_decimal(row.density);
             wrt.write_delimiter();
@@ -104,7 +104,7 @@ fn write_separate_files(vec_of_rows: &Vec<Qvs20Row>) {
 }
 
 // write one file for schema and rows - data
-fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
+fn write_one_file(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // return String from block, so the writer is dropped soon and correctly
     let text = {
         let mut wrt = WriterForQvs20::new();
@@ -123,7 +123,7 @@ fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
         wrt.write_vec_of_string_as_row(&vec!["Country", "Density"]);
 
         // qvs20 rows - data.
-        for row in vec_of_rows.iter() {
+        for row in vec_of_cou_den_rows.iter() {
             wrt.write_string(&row.country);
             wrt.write_decimal(row.density);
             wrt.write_delimiter();
@@ -138,7 +138,7 @@ fn write_one_file(vec_of_rows: &Vec<Qvs20Row>) {
 
 /// read with reader
 fn read_with_reader(file_name: &str) {
-    let mut vec_of_rows: Vec<Qvs20Row> = vec![];
+    let mut vec_of_cou_den_rows: Vec<CouDenRow> = vec![];
     // We don't need to use the schema file in our super simple code.
     // But we (the developers) have to read the schema file and learn the structure.
     // We don't need any other information, just read the schema file.
@@ -183,9 +183,10 @@ fn read_with_reader(file_name: &str) {
         // The next time it will be the wrong value without any error.
         let country = std::mem::replace(&mut vec_of_string[0], s!());
         let density = std::mem::replace(&mut vec_of_string[1], s!());
+        drop(vec_of_string);
         let density = unwrap!(Decimal::from_str(&density));
-        vec_of_rows.push(Qvs20Row { country, density });
+        vec_of_cou_den_rows.push(CouDenRow { country, density });
     }
     println!("Read with reader: {}", file_name);
-    dbg!(vec_of_rows);
+    dbg!(vec_of_cou_den_rows);
 }

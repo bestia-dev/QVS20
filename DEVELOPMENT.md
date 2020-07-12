@@ -30,6 +30,8 @@ It is wise to put repetitive code in a library. The first library is low level. 
 
 [comment]: # (lmake_md_to_doc_comments end B)
 
+[comment]: # (lmake_md_to_doc_comments start C)
+
 ### 3. using the qvs20_Table library
 
 The qvs20 Table is in memory struct that contains all the data and their properties for the qvs20 format.  
@@ -37,6 +39,9 @@ The table structure is very flexible, because it is defined in runtime.
 A lot of times the table is used just as an intermediary, and don't need a fixed Rust struct in compile time.  
 It means that sometimes a change in the table does not dictate change in source code and consequently Rust slow compiling.  
 I am sure it is not the most efficient way of working with large amounts of data, but the flexibility is sometimes more important.  
+`clear; cargo run --example example_03_qvs20_table`  
+
+[comment]: # (lmake_md_to_doc_comments end C)
 
 ### 4. Manually write an implementation for a struct
 

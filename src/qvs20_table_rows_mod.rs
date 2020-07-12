@@ -56,6 +56,14 @@ impl Default for Value {
 }
 
 impl TableRows {
+    pub fn new(table_name: &str, row_delimiter: u8) -> Result<TableRows, Qvs20Error> {
+        let mut table_rows = TableRows::default();
+        table_rows.table_name = s!(table_name);
+        table_rows.row_delimiter = row_delimiter;
+        // return
+        Ok(table_rows)
+    }
+
     /// rows from separate file than schema
     pub fn rows_from_qvs20_str(input: &str, schema: &TableSchema) -> Result<TableRows, Qvs20Error> {
         // the input is String to ensure it is well-formed utf8
