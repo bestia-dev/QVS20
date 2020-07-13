@@ -372,7 +372,7 @@ We must take care to limit the row delimiter to only one byte. It means there ca
   
 The Schema is write always in 5 mandatory rows:  
 
-- 1st row - table name  
+- 1st row - file type, table name and description  
 - 2st row - data types  
 - 3nd row - sub table schemas  
 - 4nd row - additional data  
@@ -381,14 +381,21 @@ The Schema is write always in 5 mandatory rows:
 The Schema is mandatory.  
 It can be included in the same `QVS20` file or can exist in an external `QVS20` file.  
 That way is possible to have files with only data. Great for small packets of data.  
+There is no other configuration needed to operate with qvs20.  
 
-### Schema 1st row - table name and description
+### Schema 1st row - file type, table name and description
 
 It is great to recognize the data from inside the data itself.  
 The file name can change for various reasons and is not always coherent.  
-Only two fields are in the first row.  
+There are 3 possible file types for qvs20:  
+
+1. only schema - is marked with [S]
+2. only rows - is marked with [R]
+3. full (schema+rows) - is marked with [T]
+
+The marker helps the parser to early recognize the file and its content.  
 The table name is short and is used to assert that the separate TableRows file and the TableSchema file are really from the same Table.  
-The description can be long if is needed.  
+The description can be long if is needed. It is a string, therefore it is escaped.  
 
 ### Schema 2nd row - Data types
 
@@ -427,10 +434,17 @@ Example of 5th row with column names:
 
 The actual data is write in TableRows. This can be in a separate file or in the same file after the schema.  
 
-### TableRows 1st row - table name - only when in separate file without Schema
+### TableRows 1st row - file type, table name
 
-When TableRows are in separate file, the first row contains only one field: the TableName.  
-So we can check if the Schema and the Rows are from the same table when they are in separate files.  
+There are 3 possible file types for qvs20:  
+
+1. only schema - is marked with [S]
+2. only rows - is marked with [R]
+3. full (schema+rows) - is marked with [T]
+
+The marker helps the parser to early recognize the file and its content.  
+When TableRows are in separate file, the first row contains only file type and table name. No need for description here, because is already in the schema.  
+With the table name we can check if the Schema and the Rows are from the same table when they are in separate files.  
 When the schema and table are together in the same file, this row is not needed.  
 
 ## Versions  

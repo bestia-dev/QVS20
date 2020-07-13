@@ -3,9 +3,9 @@ use qvs20::*;
 
 #[test]
 fn t10_sub_table() {
-    let s = r"[table_name][description]
+    let s = r"[T][table_name][description]
 [String][SubTable][String]
-[][1[vers][description]1[String]1[]1[]1[ver]1][]
+[][1[U][vers][description]1[String]1[]1[]1[ver]1][]
 [blue][red][x]
 [name][vers][desc]
 [name_1][1[1.0]1[1.1]1[2.1]1[2.2]1][desc_2]

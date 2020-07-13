@@ -106,7 +106,7 @@ impl TableSchema {
     fn active_row_str(&self) -> String {
         // humans count from 1, machines count from 0
         let a = match self.active_row {
-            0 => "1st row - table name and description",
+            0 => "1st row - file_type, table name and description",
             1 => "2nd row - data types",
             2 => "3rd row - SubTable schemas",
             3 => "4th row - additional properties",
@@ -130,8 +130,10 @@ impl TableSchema {
             match result? {
                 ValueForSchema::String(value) => {
                     if self.active_column == 0 {
-                        self.table_name = value;
+                        let _file_type = value;
                     } else if self.active_column == 1 {
+                        self.table_name = value;
+                    } else if self.active_column == 2 {
                         self.table_description = value;
                     }
                     self.active_column += 1;
@@ -313,10 +315,10 @@ impl TableSchema {
                 return Some(Ok(ValueForSchema::String(value)));
             }
             Token::RowDelimiter(r) => {
-                // 1st row must have 2 columns
-                if self.active_row == 0 && self.active_column != 2 {
+                // 1st row must have 3 columns
+                if self.active_row == 0 && self.active_column != 3 {
                     return Some(Err(Qvs20Error::Error {
-                        msg: format!("Schema {} must have 2 columns.", self.active_row_str()),
+                        msg: format!("Schema {} must have 3 columns.", self.active_row_str()),
                     }));
                 }
                 // all other rows must have same column count as the 2nd row - data types
@@ -416,16 +418,21 @@ impl TableSchema {
         }
     }
 
-    // write schema to String
+    // write standalone schema to String
     pub fn write_schema(&self) -> String {
         let mut wrt = WriterForQvs20::new();
-        self.write_schema_to_writer(&mut wrt);
+        self.write_schema_to_writer(&mut wrt, true);
         //return
         wrt.return_and_finish()
     }
 
     /// write to writer
-    pub fn write_schema_to_writer(&self, wrt: &mut WriterForQvs20) {
+    pub fn write_schema_to_writer(&self, wrt: &mut WriterForQvs20, schema_only:bool) {
+        if schema_only==true{
+            wrt.write_string("S");
+        }else{
+            wrt.write_string("T");
+        }
         wrt.write_string(&self.table_name);
         wrt.write_string(&self.table_description);
         wrt.write_delimiter();
@@ -463,47 +470,47 @@ mod test {
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
             remove_src_loc(err),
-            "Error: Missing mandatory Schema 1st row - table name and description."
+            "Error: Missing mandatory Schema 1st row - file_type, table name and description."
         );
 
         let s = r"bad-formed text";
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
             remove_src_loc(err),
-            "Error: Schema 1st row - table name and description The field must start with [. ./file.qvs20:0:0"
+            "Error: Schema 1st row - file_type, table name and description The field must start with [. ./file.qvs20:0:0"
         );
 
         let s = r"[bad-formed text";
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
             remove_src_loc(err),
-            "Error: Schema 1st row - table name and description Last bracket is missing. ./file.qvs20:0:1"
+            "Error: Schema 1st row - file_type, table name and description Last bracket is missing. ./file.qvs20:0:1"
         );
 
-        let s = r"[no sec col]";
+        let s = r"[S]";
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
             remove_src_loc(err),
-            "Error: Schema 1st row - table name and description Last row delimiter is missing. ./file.qvs20:0:12"
+            "Error: Schema 1st row - file_type, table name and description Last row delimiter is missing. ./file.qvs20:0:3"
         );
 
-        let s = r"[name][desc]";
+        let s = r"[S][name][desc]";
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
             remove_src_loc(err),
-            "Error: Schema 1st row - table name and description Last row delimiter is missing. ./file.qvs20:0:12"
+            "Error: Schema 1st row - file_type, table name and description Last row delimiter is missing. ./file.qvs20:0:15"
         );
 
-        let s = "[name][row delimiter too big]\n\n";
+        let s = "[S][name][row delimiter too big]\n\n";
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
             remove_src_loc(err),
-            "Error: Schema 1st row - table name and description The row delimiter has more than 1 byte. ./file.qvs20:0:29"
+            "Error: Schema 1st row - file_type, table name and description The row delimiter has more than 1 byte. ./file.qvs20:0:32"
         );
 
         // error in Schema 2nd row - data types
         // good table_name, but no 2nd row
-        let pre_string = "[table name][description]\n";
+        let pre_string = "[S][table name][description]\n";
         let s = format!("{}{}", pre_string, "");
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
@@ -549,7 +556,7 @@ mod test {
         // for Schema 3rd row -sub table schema there is separate test
 
         // error in Schema 4th row - additional properties
-        let pre_string = "[table name][description]\n[String][Integer][Decimal]\n[][][]\n";
+        let pre_string = "[S][table name][description]\n[String][Integer][Decimal]\n[][][]\n";
         let s = format!("{}{}", pre_string, "");
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
@@ -594,7 +601,7 @@ mod test {
         );
 
         // Schema 5th row: column names
-        let pre_string = "[table name][description]\n[String][Integer][Decimal]\n[][][]\n[prop1][prop2][prop3]\n";
+        let pre_string = "[S][table name][description]\n[String][Integer][Decimal]\n[][][]\n[prop1][prop2][prop3]\n";
         let s = format!("{}{}", pre_string, "");
         let err = TableSchema::schema_from_qvs20_str(&s).unwrap_err();
         assert_eq!(
@@ -641,6 +648,17 @@ mod test {
         assert_eq!(
             remove_src_loc(err),
             "Error: Schema 5th row - column names The row delimiter has more than 1 byte. ./file.qvs20:4:22"
+        );
+    }
+    #[test]
+    pub fn t02_write_schema() {
+        let schema = TableSchema::new_simple_strings(3);
+        let mut wrt = WriterForQvs20::new();
+        schema.write_schema_to_writer(&mut wrt,true);
+        let output = wrt.return_and_finish();
+        assert_eq!(
+            output,
+            "[S][t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n"
         );
     }
 }

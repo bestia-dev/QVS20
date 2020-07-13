@@ -78,7 +78,7 @@ impl WriterForQvs20 {
         let mut wrt = WriterForQvs20::new_with_delimiter(schema.row_delimiter as char);
         //sub table start with delimiter
         wrt.write_delimiter();
-        schema.write_schema_to_writer(&mut wrt);
+        schema.write_schema_to_writer(&mut wrt,true);
         let output_sub_schema = wrt.return_and_finish();
 
         self.output.push_str(&output_sub_schema);
@@ -146,27 +146,5 @@ mod test {
         let output = wrt.return_and_finish();
         assert_eq!(output, "[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n");
     }
-    #[test]
-    pub fn t02_write_schema() {
-        let schema = TableSchema::new_simple_strings(3);
-        let mut wrt = WriterForQvs20::new();
-        schema.write_schema_to_writer(&mut wrt);
-        let output = wrt.return_and_finish();
-        assert_eq!(
-            output,
-            "[t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n"
-        );
-    }
-    #[test]
-    pub fn t03_write_schema_and_data() {
-        let schema = TableSchema::new_simple_strings(3);
-        let mut wrt = WriterForQvs20::new();
-        schema.write_schema_to_writer(&mut wrt);
-        wrt.write_string("three");
-        wrt.write_string("o\\n[e]");
-        wrt.write_string("t\nw\to\r");
-        wrt.write_delimiter();
-        let output = wrt.return_and_finish();
-        assert_eq!(output, "[t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n");
-    }
+    
 }

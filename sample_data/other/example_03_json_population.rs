@@ -71,7 +71,7 @@ fn write_qvs20_schema_and_rows_to_file(country_population: &Vec<CountryPopulatio
     let ns_1 = ns_start();
     // prepare schema manually into string
     let schema = unwrap!(TableSchema::schema_from_qvs20_str(
-        r#"[population][country population table]
+        r#"[S][population][country population table]
 [String][Integer]
 [][]
 [Required][Required]

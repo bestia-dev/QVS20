@@ -8,6 +8,7 @@
 
 use lazy_static::lazy_static;
 use regex::Regex;
+use rust_decimal::prelude::*;
 use thiserror::Error;
 use unwrap::unwrap;
 
@@ -162,6 +163,7 @@ impl<'a> ReaderForQvs20<'a> {
             false
         }
     }
+
     /// unescape the qvs20 special 6 characters
     /// \\ Backslash character
     /// \[ Right Square Bracket
@@ -207,13 +209,14 @@ impl<'a> ReaderForQvs20<'a> {
         // return
         Ok(ret)
     }
-    /// get next token and convert to string
-    pub fn next_string(&mut self) -> Result<String, Qvs20Error> {
+
+    /// get next field as array of u8
+    fn next_field_array_of_u8(&mut self) -> Result<&[u8], Qvs20Error> {
         let result = match self.next() {
             Some(p) => p,
             None => {
                 return Err(Qvs20Error::Error {
-                    msg: format!("expected string found end of data {}", src_loc!(),),
+                    msg: format!("expected value found end of data {}", src_loc!(),),
                 })
             }
         };
@@ -226,17 +229,23 @@ impl<'a> ReaderForQvs20<'a> {
             }
         };
         match token {
-            Token::Field(field_value) => match Self::unescape(field_value) {
-                Ok(s) => return Ok(s),
-                Err(e) => {
-                    return Err(Qvs20Error::Error {
-                        msg: format!("Failed unescape to string. {}{}", src_loc!(), err_trim!(e)),
-                    })
-                }
-            },
+            Token::Field(field_value) => return Ok(field_value),
             _ => {
                 return Err(Qvs20Error::Error {
                     msg: format!("expected field not found {}", src_loc!(),),
+                })
+            }
+        }
+    }
+
+    /// get next token and convert to string
+    pub fn next_string(&mut self) -> Result<String, Qvs20Error> {
+        let field_value = self.next_field_array_of_u8()?;
+        match Self::unescape(field_value) {
+            Ok(s) => return Ok(s),
+            Err(e) => {
+                return Err(Qvs20Error::Error {
+                    msg: format!("Failed unescape to string. {}{}", src_loc!(), err_trim!(e)),
                 })
             }
         }
@@ -294,6 +303,37 @@ impl<'a> ReaderForQvs20<'a> {
                 })
             }
         }
+    }
+
+    /// get next token and convert to decimal
+    pub fn next_decimal(&mut self) -> Result<Decimal, Qvs20Error> {
+        let field_value = self.next_field_array_of_u8()?;
+        let str_value = match String::from_utf8(field_value.to_vec()) {
+            Ok(n) => n,
+            Err(e) => {
+                return Err(Qvs20Error::Error {
+                    msg: format!(
+                        "Failed conversion to string. {}{}",
+                        src_loc!(),
+                        err_trim!(e)
+                    ),
+                })
+            }
+        };
+        let decimal_value = match Decimal::from_str(&str_value) {
+            Ok(n) => n,
+            Err(e) => {
+                return Err(Qvs20Error::Error {
+                    msg: format!(
+                        "Failed conversion to decimal. {}{}",
+                        src_loc!(),
+                        err_trim!(e)
+                    ),
+                })
+            }
+        };
+        //return
+        Ok(decimal_value)
     }
 
     /// get next row_delimiter with check

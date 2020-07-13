@@ -60,7 +60,7 @@ impl Table {
     /// write to String
     pub fn write_table(&self) -> String {
         let mut wrt = WriterForQvs20::new();
-        self.schema.write_schema_to_writer(&mut wrt);
+        self.schema.write_schema_to_writer(&mut wrt, false);
         self.table_rows.write_table_rows_to_writer(&mut wrt);
         //return
         wrt.return_and_finish()
@@ -74,7 +74,7 @@ mod test {
 
     #[test]
     pub fn t01_string_table() {
-        let s = r"[table_name][table_description]
+        let s = r"[T][table_name][table_description]
 [String][String]
 [][]
 [blue][red]
@@ -88,7 +88,7 @@ mod test {
     }
     #[test]
     pub fn t02_all_wrong_in_data_rows() {
-        let pre_string = "[table name][description]\n[String][String][String]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+        let pre_string = "[T][table name][description]\n[String][String][String]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[string1";
         let s = format!("{}{}", pre_string, data);
@@ -190,7 +190,7 @@ mod test {
     }
     #[test]
     pub fn t03_data_type_integer() {
-        let pre_string = "[table name][description]\n[Integer][Integer][Integer]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+        let pre_string = "[T][table name][description]\n[Integer][Integer][Integer]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[11][22][a]\n";
         let s = format!("{}{}", pre_string, data);
@@ -223,7 +223,7 @@ mod test {
     }
     #[test]
     pub fn t04_data_type_decimal() {
-        let pre_string = "[table name][description]\n[Decimal][Decimal][Decimal]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+        let pre_string = "[T][table name][description]\n[Decimal][Decimal][Decimal]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[11.1][22.22][a]\n";
         let s = format!("{}{}", pre_string, data);
@@ -257,7 +257,7 @@ mod test {
     #[test]
     pub fn t05_data_type_float() {
         let pre_string =
-            "[table name][description]\n[Float][Float][Float]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+            "[T][table name][description]\n[Float][Float][Float]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[1.1e2][22.22][a]\n";
         let s = format!("{}{}", pre_string, data);
@@ -283,7 +283,7 @@ mod test {
     #[test]
     pub fn t06_data_type_bool() {
         let pre_string =
-            "[table name][description]\n[Bool][Bool][Bool]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+            "[T][table name][description]\n[Bool][Bool][Bool]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[T][F][a]\n";
         let s = format!("{}{}", pre_string, data);
@@ -311,7 +311,7 @@ mod test {
     }
     #[test]
     pub fn t07_data_type_datetime() {
-        let pre_string = "[table name][description]\n[DateTimeFixedOffset][DateTimeFixedOffset][DateTimeFixedOffset]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+        let pre_string = "[T][table name][description]\n[DateTimeFixedOffset][DateTimeFixedOffset][DateTimeFixedOffset]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[2014-11-28T21:00:09+09:00][2020-06-27T23:59:59+03:30][2014-11-28T21:00:09]\n";
         let s = format!("{}{}", pre_string, data);
@@ -349,7 +349,7 @@ mod test {
     #[test]
     pub fn t08_data_type_date() {
         let pre_string =
-            "[table name][description]\n[Date][Date][Date]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+            "[T][table name][description]\n[Date][Date][Date]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[2014-11-28][2020-06-27][2014-11-28+1]\n";
         let s = format!("{}{}", pre_string, data);
@@ -378,7 +378,7 @@ mod test {
     #[test]
     pub fn t09_data_type_time() {
         let pre_string =
-            "[table name][description]\n[Time][Time][Time]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
+            "[T][table name][description]\n[Time][Time][Time]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n";
         // rows of data active_row 0
         let data = "[23:59:59][23:59:59.123456][23:59]\n";
         let s = format!("{}{}", pre_string, data);
@@ -403,5 +403,18 @@ mod test {
             remove_src_loc(err),
             "Error: Failed conversion to time. input contains invalid characters. row 0 col 2"
         );
+    }
+    
+    #[test]
+    pub fn t03_write_schema_and_data() {
+        let schema = TableSchema::new_simple_strings(3);
+        let mut wrt = WriterForQvs20::new();
+        schema.write_schema_to_writer(&mut wrt,false);
+        wrt.write_string("three");
+        wrt.write_string("o\\n[e]");
+        wrt.write_string("t\nw\to\r");
+        wrt.write_delimiter();
+        let output = wrt.return_and_finish();
+        assert_eq!(output, "[T][t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n");
     }
 }

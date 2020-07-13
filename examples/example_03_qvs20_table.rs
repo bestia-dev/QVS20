@@ -21,8 +21,9 @@ fn main() {
     // fill the vector with data
     let vec_of_cou_den_rows = fill_sample_data();
 
-    write_separate_files(&vec_of_cou_den_rows);
-    write_one_file(&vec_of_cou_den_rows);
+    write_schema(&vec_of_cou_den_rows);
+    write_rows(&vec_of_cou_den_rows);
+    write_table(&vec_of_cou_den_rows);
 
     read_to_table_separate("cou_den3_schema.qvs20", "cou_den3_rows.qvs20");
     read_to_table("cou_den3.qvs20");
@@ -52,9 +53,9 @@ fn fill_sample_data() -> Vec<CouDenRow> {
 }
 
 // write separate files for schema and rows - data
-fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
+fn write_schema(_vec_of_cou_den_rows: &Vec<CouDenRow>) {
     let schema = unwrap!(TableSchema::schema_from_qvs20_str(
-        r#"[cou_den3][example with country population density]
+        r#"[S][cou_den3][example with country population density]
 [String][Decimal]
 [][]
 [][]
@@ -68,7 +69,10 @@ fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     ));
     println!("write cou_den3_schema.qvs20:");
     println!("{}", schema_text);
-
+}
+// write separate files for schema and rows - data
+fn write_rows(vec_of_cou_den_rows: &Vec<CouDenRow>) {
+    
     let mut table_rows = unwrap!(TableRows::new("cou_den3", b'\n'));
     for cou_den_row in vec_of_cou_den_rows.iter() {
         let row = Row {
@@ -87,10 +91,11 @@ fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     println!("write cou_den3_rows.qvs20:");
     println!("{}", rows_text);
 }
+
 // write one file for table
-fn write_one_file(vec_of_cou_den_rows: &Vec<CouDenRow>) {
+fn write_table(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     let schema = unwrap!(TableSchema::schema_from_qvs20_str(
-        r#"[cou_den3][example with country population density]
+        r#"[S][cou_den3][example with country population density]
 [String][Decimal]
 [][]
 [][]

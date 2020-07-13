@@ -22,7 +22,8 @@ fn main() {
     // fill the vector with data
     let vec_of_cou_den_rows = fill_sample_data();
 
-    write_separate_files(&vec_of_cou_den_rows);
+    write_schema(&vec_of_cou_den_rows);
+    write_rows(&vec_of_cou_den_rows);
     write_one_file(&vec_of_cou_den_rows);
 
     read_with_reader("cou_den2_rows.qvs20");
@@ -53,12 +54,13 @@ fn fill_sample_data() -> Vec<CouDenRow> {
 }
 
 // write separate files for schema and rows - data
-fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
+fn write_schema(_vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Separate qvs20 schema file
     // return String from block, so the writer is dropped soon and correctly
     let schema_text = {
         let mut wrt = WriterForQvs20::new();
         wrt.write_vec_of_string_as_row(&vec![
+            "S",
             "cou_den2",
             "example with country population density",
         ]);
@@ -79,12 +81,17 @@ fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     ));
     println!("write cou_den2_schema.qvs20:");
     println!("{}", schema_text);
+}
 
+// write separate files for schema and rows - data
+fn write_rows(vec_of_cou_den_rows: &Vec<CouDenRow>) {
+    
     // return String from block, so the writer is dropped soon and correctly
     let rows_text = {
         // Separate file for qvs20 rows - data.
         let mut wrt = WriterForQvs20::new();
-        // First row is table name. Always end row with delimiter \n.
+        // First row is file type and table name. Always end row with delimiter \n.
+        wrt.write_string("R");
         wrt.write_string("cou_den2");
         wrt.write_delimiter();
         for row in vec_of_cou_den_rows.iter() {
@@ -110,6 +117,7 @@ fn write_one_file(vec_of_cou_den_rows: &Vec<CouDenRow>) {
         let mut wrt = WriterForQvs20::new();
         // 5 rows for schema
         wrt.write_vec_of_string_as_row(&vec![
+            "T",
             "cou_den2",
             "example with country population density",
         ]);
@@ -152,14 +160,15 @@ fn read_with_reader(file_name: &str) {
 
     // move out of vector. Warning: can be used only once!
     // The next time it will be the wrong value without any error.
-    let table_name = std::mem::replace(&mut vec_of_string[0], s!());
+    let file_type = std::mem::replace(&mut vec_of_string[0], s!());
+    let table_name = std::mem::replace(&mut vec_of_string[1], s!());
     if table_name != "cou_den2" {
         panic!("wrong table name");
     }
     // the next column defines if the files has the schema or not
-    if vec_of_string.len() == 1 {
+    if file_type=="R" {
         // only rows - data
-    } else if vec_of_string.len() == 2 {
+    } else if file_type == "T" || file_type == "S" {
         // schema with 5 rows
         // move out of vector. Warning: can be used only once!
         // The next time it will be the wrong value without any error.

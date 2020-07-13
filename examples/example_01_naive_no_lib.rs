@@ -19,7 +19,8 @@ fn main() {
     // fill the vector with data
     let vec_of_cou_den_rows = fill_sample_data();
 
-    write_separate_files(&vec_of_cou_den_rows);
+    write_schema(&vec_of_cou_den_rows);
+    write_rows(&vec_of_cou_den_rows);
     write_one_file(&vec_of_cou_den_rows);
 
     read_with_find("cou_den1_rows.qvs20");
@@ -53,7 +54,7 @@ fn fill_sample_data() -> Vec<CouDenRow> {
 }
 
 // write separate files for schema and rows - data
-fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
+fn write_schema(_vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Separate qvs20 schema file is simple to write manually in a string.
     // Remember the rows meaning:
     // 1. table name, description
@@ -63,7 +64,7 @@ fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // 5. column names
     // Nowhere extra spaces, delimiter is exactly \n.
     // Escaping the 6 special characters ([,],\,\n,\r,\t) is very very rare here.
-    let schema_text = "[cou_den1][example with country population density]
+    let schema_text = "[S][cou_den1][example with country population density]
 [String][Decimal]
 [][]
 [][]
@@ -75,13 +76,16 @@ fn write_separate_files(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     ));
     println!("cou_den1_schema.qvs20:");
     println!("{}", schema_text);
+}
 
+// write separate files for schema and rows - data
+fn write_rows(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Separate file for qvs20 rows - data.
     // We already know the data and we know there is no need
     // for escaping the 6 special character.
     let mut rows_text = String::with_capacity(200);
     // First row is table name. Always end row with delimiter \n.
-    rows_text.push_str("[cou_den1]\n");
+    rows_text.push_str("[R][cou_den1]\n");
     for row in vec_of_cou_den_rows.iter() {
         rows_text.push('[');
         rows_text.push_str(&row.country);
@@ -112,7 +116,7 @@ fn write_one_file(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Escaping the 6 special characters ([,],\,\n,\r,\t) is very very rare here.
     let mut text = String::with_capacity(200);
     text.push_str(
-        "[cou_den1][example with country population density]
+        "[T][cou_den1][example with country population density]
 [String][Decimal]
 [][]
 [][]
@@ -151,12 +155,13 @@ fn read_with_find(file_name: &str) {
     )));
     // we can use the first row to check if we opened the right file
     let mut pos_cursor = 0;
-    let string_value = read_next_column(&text, &mut pos_cursor);
-    if string_value != "cou_den1" {
+    let file_type = read_next_column(&text, &mut pos_cursor);
+    let table_name = read_next_column(&text, &mut pos_cursor);
+    if table_name != "cou_den1" {
         panic!("wrong table name");
     }
 
-    check_table_name_and_jump_over_schema_with_find(&text, &mut pos_cursor);
+    jump_over_schema_with_find(&text, &mut pos_cursor,&file_type);
 
     // this is the start of rows - data
     while pos_cursor < text.len() {
@@ -171,14 +176,12 @@ fn read_with_find(file_name: &str) {
 }
 
 /// The first column of the first row is always the table_name.
-pub fn check_table_name_and_jump_over_schema_with_find(text: &str, pos_cursor: &mut usize) {
-    // We can deduce if the schema is included in this file or not.
-    // When there is a schema, the first row has 2 columns (table_name and description).
-    // Else it has only one column (table_name).
-    if &text[*pos_cursor..*pos_cursor + 1] == "\n" {
+pub fn jump_over_schema_with_find(text: &str, pos_cursor: &mut usize, file_type:&str) {
+    // file_type S-only schema, R-only rows, T-table (schema+rows)
+    if file_type=="R" {
         // this file has only rows - data
         *pos_cursor += 1;
-    } else {
+    } else if file_type=="T" || file_type=="S" {
         // this file has the schema
         // we don't need any data from the schema,
         // we will just jump over the schema 5 rows
@@ -197,7 +200,10 @@ pub fn check_table_name_and_jump_over_schema_with_find(text: &str, pos_cursor: &
         if row_count != 5 {
             panic!("error. the schema is not complete.");
         }
+    }else{
+        panic!("error. file type is not correct");
     }
+
 }
 
 /// find from position
@@ -254,7 +260,7 @@ fn read_with_regex(file_name: &str) {
     // iterator of lines/rows
     let mut lines = text.lines();
     let first_row = unwrap!(lines.next());
-    check_table_name_and_jump_over_schema_with_regex(first_row, &mut lines);
+    jump_over_schema_with_regex(first_row, &mut lines);
 
     while let Some(line) = lines.next() {
         // the developer knows from the schema there are 2 columns
@@ -273,7 +279,7 @@ fn read_with_regex(file_name: &str) {
 }
 
 /// The first column of the first row is always the table_name.
-fn check_table_name_and_jump_over_schema_with_regex(
+fn jump_over_schema_with_regex(
     first_row: &str,
     lines: &mut std::str::Lines<'_>,
 ) {
@@ -281,16 +287,19 @@ fn check_table_name_and_jump_over_schema_with_regex(
     // regex capture group ([^\]]*?) for getting the table_name
     // any character except ] zero or more times not-greedy
     // check if the first row has only one column. Then we have only rows.
-    let regex_table_name_1: Regex = unwrap!(Regex::new(r#"^\[([^\]]*?)\]$"#));
+    let regex_table_name_1: Regex = unwrap!(Regex::new(r#"^\[([^\]]*?)\]\[([^\]]*?)\]$"#));
     if let Some(cap) = regex_table_name_1.captures(first_row) {
-        table_name = unwrap!(cap.get(1)).as_str();
+        let _file_type = unwrap!(cap.get(1)).as_str();
+        table_name = unwrap!(cap.get(2)).as_str();
         println!("table_name no schema: {}", table_name);
     // The next line/row is data
     } else {
         // check if the first row has 2 columns. Then we have the schema.
-        let regex_table_name_2: Regex = unwrap!(Regex::new(r#"^\[([^\]]*?)\]\[[^\]]*?\]$"#));
+        let regex_table_name_2: Regex = unwrap!(Regex::new(r#"^\[([^\]]*?)\]\[([^\]]*?)\]\[([^\]]*?)\]$"#));
         if let Some(cap) = regex_table_name_2.captures(first_row) {
-            table_name = unwrap!(cap.get(1)).as_str();
+            let _file_type = unwrap!(cap.get(1)).as_str();
+            table_name = unwrap!(cap.get(2)).as_str();
+            let _description = unwrap!(cap.get(3)).as_str();
             println!("table_name with schema: {}", table_name);
             // jump over the first 5 rows.
             let _x = unwrap!(lines.next());

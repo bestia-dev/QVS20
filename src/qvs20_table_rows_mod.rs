@@ -73,88 +73,31 @@ impl TableRows {
         let mut table_rows = TableRows::default();
         table_rows.row_delimiter = schema.row_delimiter;
         // first row is table_name and must be equal to schema
-        while let Some(result) = table_rows.while_table_rows_1st_row_table_name(&mut rdr, schema) {
-            // if Err then propagate
-            result?;
-        }
+        table_rows.read_1st_row_file_type_and_table_name(&mut rdr)?;
         table_rows.append_data_rows(&mut rdr, schema)?;
         //return
         Ok(table_rows)
     }
-    /// if Table_rows is in separate file, than this 1st row: table name is mandatory
-    fn while_table_rows_1st_row_table_name(
+    /// 1st row: file_type, table name, row_delimiter
+    fn read_1st_row_file_type_and_table_name(
         &mut self,
         rdr: &mut ReaderForQvs20,
-        schema: &TableSchema,
-    ) -> Option<Result<(), Qvs20Error>> {
-        let result = match rdr.next() {
-            Some(p) => p,
-            None => {
-                return Some(Err(Qvs20Error::Error {
-                    msg: format!("Missing table_name {}", src_loc!()),
-                }))
-            }
-        };
-        let token = match result {
-            Ok(p) => p,
-            Err(e) => {
-                return Some(Err(Qvs20Error::Error {
-                    msg: format!("Table_name {} {}", err_trim!(e), src_loc!()),
-                }))
-            }
-        };
-        match token {
-            Token::Field(table_name) => {
-                let table_name = match ReaderForQvs20::unescape(table_name) {
-                    Ok(p) => p,
-                    Err(e) => {
-                        return Some(Err(Qvs20Error::Error {
-                            msg: format!("First row {}", err_trim!(e)),
-                        }))
-                    }
-                };
-                self.table_name = table_name;
-                self.active_column += 1;
-                // return
-                Some(Ok(()))
-            }
-            Token::RowDelimiter(r) => {
-                // end of row
-                // Schema 1st row must have 2 cols
-                if self.active_column != 1 {
-                    return Some(Err(Qvs20Error::Error {
-                        msg: s!("First row must have exactly 1 column - table_name."),
-                    }));
-                }
-                // row delimiter must be the same
-                if r != self.row_delimiter {
-                    return Some(Err(Qvs20Error::Error {
-                        msg: format!(
-                            "First row wrong row delimiter:{:?} instead of {:?}",
-                            r, self.row_delimiter
-                        ),
-                    }));
-                }
-                if self.table_name != schema.table_name {
-                    return Some(Err(Qvs20Error::Error {
-                        msg: format!(
-                            "Schema table_name {} and rows table name {} are different ! {}",
-                            schema.table_name,
-                            self.table_name,
-                            src_loc!()
-                        ),
-                    }));
-                }
-                self.active_column = 0;
-                //end of row
-                return None;
-            }
-            Token::StartSubTable(_x) | Token::EndSubTable(_x) => {
-                return Some(Err(Qvs20Error::Error {
-                    msg: format!("First row, expected Field found sub_table."),
-                }))
-            }
+    ) -> Result<(), Qvs20Error> {
+        let vec = rdr.next_row_as_vec_of_string()?;
+        if vec.len() != 2 {
+            return Err(Qvs20Error::Error {
+                msg: format!("TableRows first row does not have 2 columns: file type and table name."),
+            })
         }
+        if vec[0] != "R"{
+            return Err(Qvs20Error::Error {
+                msg: format!("TableRows first field must be R for this file type"),
+            })
+        }
+        self.table_name = vec[1].to_owned();
+        // None is correct end of row
+        // return
+        Ok(())
     }
 
     /// internal append data to table after schema
@@ -613,7 +556,8 @@ impl TableRows {
     pub fn write_table_rows_to_writer(&self, wrt: &mut WriterForQvs20) {
         if wrt.output_is_empty() {
             // when TableRows are in separate file from Schema
-            // the 1st row has one field: TableName
+            // the 1st row has 2 fields: file type and TableName
+            wrt.write_string("R");
             wrt.write_string(&self.table_name);
             wrt.write_delimiter();
         }
@@ -646,14 +590,14 @@ mod test {
 
     #[test]
     pub fn t01_sub_table_separate_schema_and_rows() {
-        let s = r"[table_name][description]
+        let s = r"[S][table_name][description]
 [String][SubTable][String]
-[][1[vers][single col]1[String]1[]1[]1[ver]1][]
+[][1[U][vers][single col]1[String]1[]1[]1[ver]1][]
 [blue][red][x]
 [name][vers][desc]
 ";
         let schema = unwrap!(TableSchema::schema_from_qvs20_str(&s));
-        let d = r"[table_name]
+        let d = r"[R][table_name]
 [name_1][1[1.0]1[1.1]1[2.1]1[2.2]1][desc_2]
 [name_3][1[1.0]1[1.1]1[2.1]1[2.2]1][desc_4]
 ";

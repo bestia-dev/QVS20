@@ -25,7 +25,7 @@ The second approach is with regex.
 
 ### 2. using reader and writer library
 
-It is wise to put repetitive code in a library. The first library is low level. Just read and write. Usage of libraries makes it possible to gradually enhance it with more complex data-types as needed. The library encapsulate the code to parse and escape/unescape.  
+It is wise to put repetitive code in a library. The first library is low level. Just read and write. Usage of libraries makes it possible to gradually enhance it with more complex data-types and methods as needed. The library encapsulate the code to parse and escape/unescape.  
 `clear; cargo run --example example_02_reader_writer`  
 
 [comment]: # (lmake_md_to_doc_comments end B)
@@ -34,7 +34,7 @@ It is wise to put repetitive code in a library. The first library is low level. 
 
 ### 3. using the qvs20_Table library
 
-The qvs20 Table is in memory struct that contains all the data and their properties for the qvs20 format.  
+The qvs20 Table is in memory struct that contains all the data and their properties for the qvs20 format: table schema and table rows.  
 The table structure is very flexible, because it is defined in runtime.
 A lot of times the table is used just as an intermediary, and don't need a fixed Rust struct in compile time.  
 It means that sometimes a change in the table does not dictate change in source code and consequently Rust slow compiling.  

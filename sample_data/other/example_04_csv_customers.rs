@@ -76,7 +76,7 @@ fn main() {
 
     // prepare schema manually
     let schema = unwrap!(TableSchema::schema_from_qvs20_str(
-        r#"[customer records][big csv table]
+        r#"[S][customer records][big csv table]
 [String][String][String][String][String][String][String][String][String][String][String][String][String][String][String][String][String][Integer]
 [][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][]
