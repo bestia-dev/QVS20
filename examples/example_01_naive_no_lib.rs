@@ -59,7 +59,7 @@ fn fill_sample_data() -> Vec<CouDenRow> {
 // write separate files for schema and rows - data
 fn write_schema(_vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Separate qvs20 schema file is simple to write manually in a string.
-    // Remember the rows meaning:
+    // Remember the schema rows meaning:
     // 1. file type, table name, description
     // 2. data types of columns
     // 3. sub table schema
@@ -206,7 +206,6 @@ pub fn jump_over_schema_with_find(text: &str, pos_cursor: &mut usize, file_type:
     }else{
         panic!("error. file type is not correct");
     }
-
 }
 
 /// find from position

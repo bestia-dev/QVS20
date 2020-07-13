@@ -11,7 +11,7 @@ Use this examples to learn how to use the qvs20 format and library.
 We start with the naive replacement of csv. No library involved.  
 Super easy manually written code to write and read qvs20, but not "full standard".  
 Remember that the goal of qvs20 is to import/export data from database tables.  
-This naive approach can satisfy 99% of use-cases. It is extremely easily to write in any language.  
+This naive approach can satisfy 99% of use-cases. It is extremely easy to write in any language. But it can lead to incompatibilities, so is better to use a library that is 100% standard compliant.  
 Most of the data is Strings or simple decimals. No complicated data types like datetime or hierarchical SubTable. They can always be represented as Strings. Just look at the JSON standard.  
 Writing qvs20 is super easy. Not much to say here.  
 For reading the text needs to be parsed. There is a lot of different options for such a simple format:  
@@ -40,7 +40,7 @@ It is wise to put repetitive code in a library. The first library is low level. 
 The qvs20 Table is in memory struct that contains all the data and their properties for the qvs20 format: table schema and table rows.  
 The table structure is very flexible, because it is defined in runtime.
 A lot of times the table is used just as an intermediary, and don't need a fixed Rust struct in compile time.  
-It means that sometimes a change in the table does not dictate change in source code and consequently Rust slow compiling.  
+It means that sometimes a change in the table does not dictate change in source code and consequently Rust slow compilation.  
 I am sure it is not the most efficient way of working with large amounts of data, but the flexibility is sometimes more important.  
 `clear; cargo run --example example_03_qvs20_table`  
 
@@ -50,7 +50,7 @@ I am sure it is not the most efficient way of working with large amounts of data
 
 ### 4. Manually write an implementation for a struct
 
-Having a struct it is fairly easy to write an implementation that reads and writes data to the qvs20 format. Most of the code is just boilerplate.  
+Having a struct for rows and one for vector of rows, it is fairly easy to write an implementation that reads and writes data to the qvs20 format. Most of the code is just boilerplate.  
 `clear; cargo run --example example_04_manual_derive`  
 
 [comment]: # (lmake_md_to_doc_comments end D)
@@ -77,7 +77,9 @@ cargo install --force cargo-make
 # reads the Makefile.toml and shows the prepared scripts:
 clear; cargo make
 #for example
-clear; cargo make publish_to_web - can have many steps to copy, upload, tag, stop/start server,...
+clear; cargo make publish_to_web - can have many steps to copy, upload, tag, stop/start server  
+clear; cargo make doc - have many steps to prepare the md, doc comments and finally generate the documentation
+...and more
 ```
 
 ## git
