@@ -14,9 +14,12 @@ Remember that the goal of qvs20 is to import/export data from database tables.
 This naive approach can satisfy 99% of use-cases. It is extremely easily to write in any language.  
 Most of the data is Strings or simple decimals. No complicated data types like datetime or hierarchical SubTable. They can always be represented as Strings. Just look at the JSON standard.  
 Writing qvs20 is super easy. Not much to say here.  
-Reading is a bit more complicated because the text needs to be parsed.  
-The first approach is with the find() method.  
-The second approach is with regex.  
+For reading the text needs to be parsed. There is a lot of different options for such a simple format:  
+
+1. with the find() method.  
+2. with regex.  
+3. with split.  
+
 `clear; cargo run --example example_01_naive_no_lib`  
 
 [comment]: # (lmake_md_to_doc_comments end A)
@@ -43,57 +46,25 @@ I am sure it is not the most efficient way of working with large amounts of data
 
 [comment]: # (lmake_md_to_doc_comments end C)
 
+[comment]: # (lmake_md_to_doc_comments start D)
+
 ### 4. Manually write an implementation for a struct
 
 Having a struct it is fairly easy to write an implementation that reads and writes data to the qvs20 format. Most of the code is just boilerplate.  
+`clear; cargo run --example example_04_manual_derive`  
+
+[comment]: # (lmake_md_to_doc_comments end D)
+
+[comment]: # (lmake_md_to_doc_comments start E)
 
 ### 5. Derive macro
 
 Rust can codegen (code generation) the implementation in compile time, so the developer don't need to do it manually. It is achieved by a procedural derive macro in a separate crate.  
 
-### Try it
+Expand derive macro:  
+`clear; cargo expand --example example_07_derive_macro`  
 
-```bash
-# examples:
-clear; cargo run --example example_01_read_to_table table01_simple_strings.qvs20
-clear; cargo run --example example_01_read_to_table table02_int_decimal_float.qvs20
-clear; cargo run --example example_01_read_to_table table03_sub_table.qvs20
-
-clear; cargo run --example example_02_write_from_table table01_simple_strings.qvs20
-clear; cargo run --example example_02_write_from_table table02_int_decimal_float.qvs20
-clear; cargo run --example example_02_write_from_table table03_sub_table.qvs20
-
-clear; cargo run --example example_03_json_population
-clear; cargo run --example example_04_csv_customers
-clear; cargo run --example example_05_qvs20_to_struct
-
-clear; cargo run --example example_06_derive_manual
-clear; cargo run --example example_07_derive_macro
-
-# expand derive macro:
-clear; cargo expand --example example_07_derive_macro
-```
-
-## examples, bin
-
-```bash
-# bin:
-clear; cargo run --bin bin1_derive_manual
-clear; cargo run --bin bin2_derive_macro
-
-# examples:
-clear; cargo run --example example_01_read_to_table table01_simple_strings.qvs20
-clear; cargo run --example example_01_read_to_table table02_int_decimal_float.qvs20
-clear; cargo run --example example_01_read_to_table table03_sub_table.qvs20
-
-clear; cargo run --example example_02_write_from_table table01_simple_strings.qvs20
-clear; cargo run --example example_02_write_from_table table02_int_decimal_float.qvs20
-clear; cargo run --example example_02_write_from_table table03_sub_table.qvs20
-
-clear; cargo run --example example_03_json_population
-clear; cargo run --example example_04_csv_customers
-clear; cargo run --example example_05_qvs20_to_struct
-```
+[comment]: # (lmake_md_to_doc_comments end E)
 
 ## cargo make - for non-trivial or multi-line commands
 

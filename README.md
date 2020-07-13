@@ -392,6 +392,7 @@ There are 3 possible file types for qvs20:
 1. only schema - is marked with [S]
 2. only rows - is marked with [R]
 3. full (schema+rows) - is marked with [T]
+4. sub_table schema - is marked with [U], but it cannot be a standalone file
 
 The marker helps the parser to early recognize the file and its content.  
 The table name is short and is used to assert that the separate TableRows file and the TableSchema file are really from the same Table.  
@@ -441,6 +442,7 @@ There are 3 possible file types for qvs20:
 1. only schema - is marked with [S]
 2. only rows - is marked with [R]
 3. full (schema+rows) - is marked with [T]
+4. sub_table schema - is marked with [U], but it cannot be a standalone file
 
 The marker helps the parser to early recognize the file and its content.  
 When TableRows are in separate file, the first row contains only file type and table name. No need for description here, because is already in the schema.  

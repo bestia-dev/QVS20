@@ -1,5 +1,6 @@
-[customers][description]
+[T][customers][description]
 [String][String][String][String][String][String][String][String][String][String][String][String][String][String][String][String][String][Integer]
+[][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][]
 [Date Received][Product Name][Sub Product][Issue][Sub Issue][Consumer Complaint Narrative][Company Public Response][Company][State Name][Zip Code][Tags][Consumer Consent Provided][Submitted via][Date Sent to Company][Company Response to Consumer][Timely Response][Consumer Disputed][Complaint ID]
 [2013-07-29][Consumer Loan][Vehicle loan][Managing the loan or lease][][][][Wells Fargo & Company][VA][24540][][N/A][Phone][2013-07-30][Closed with explanation][Yes][No][468882]

@@ -29,6 +29,9 @@ fn main() {
     read_with_regex("cou_den1_rows.qvs20");
     read_with_regex("cou_den1.qvs20");
 
+    read_with_split("cou_den1_rows.qvs20");
+    read_with_split("cou_den1.qvs20");
+
     println!("---end example_01_naive_no_lib---");
 }
 
@@ -57,7 +60,7 @@ fn fill_sample_data() -> Vec<CouDenRow> {
 fn write_schema(_vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // Separate qvs20 schema file is simple to write manually in a string.
     // Remember the rows meaning:
-    // 1. table name, description
+    // 1. file type, table name, description
     // 2. data types of columns
     // 3. sub table schema
     // 4. additional properties
@@ -107,7 +110,7 @@ fn write_rows(vec_of_cou_den_rows: &Vec<CouDenRow>) {
 fn write_one_file(vec_of_cou_den_rows: &Vec<CouDenRow>) {
     // qvs20 schema file is simple to write manually in a string.
     // Remember the rows meaning:
-    // 1. table name, description
+    // 1. file type, table name, description
     // 2. data types of columns
     // 3. sub table schema
     // 4. additional properties
@@ -175,9 +178,9 @@ fn read_with_find(file_name: &str) {
     dbg!(vec_of_cou_den_rows);
 }
 
-/// The first column of the first row is always the table_name.
+/// The first column is file type, the second column is table_name.
 pub fn jump_over_schema_with_find(text: &str, pos_cursor: &mut usize, file_type:&str) {
-    // file_type S-only schema, R-only rows, T-table (schema+rows)
+    // file_type S-only schema, R-only rows, T-table (schema+rows), U -sub_table schema
     if file_type=="R" {
         // this file has only rows - data
         *pos_cursor += 1;
@@ -278,7 +281,7 @@ fn read_with_regex(file_name: &str) {
     dbg!(vec_of_cou_den_rows);
 }
 
-/// The first column of the first row is always the table_name.
+/// The first column is file type, the second column is table_name.
 fn jump_over_schema_with_regex(
     first_row: &str,
     lines: &mut std::str::Lines<'_>,
@@ -315,3 +318,40 @@ fn jump_over_schema_with_regex(
 }
 
 // endregion: read with regex
+
+/// read using split
+fn read_with_split(file_name: &str) {
+    let mut vec_of_cou_den_rows: Vec<CouDenRow> = vec![];
+    let text = unwrap!(fs::read_to_string(&format!(
+        "sample_data/write/{}",
+        file_name
+    )));
+    // iterator of lines/rows
+    let mut lines = text.lines();
+    let first_row = unwrap!(lines.next());
+    let vec_of_string:Vec<&str> = first_row.trim_start_matches("[").trim_end_matches("]").split_terminator("][").collect();
+    // table_name
+    if vec_of_string[1] != "cou_den1" {
+        panic!("wrong table name");
+    }
+    //file type
+    if vec_of_string[0]=="S"{
+        panic!("error schema only");
+    } else if vec_of_string[0]=="T"{
+        // don't need the schema in the code
+        unwrap!(lines.next());
+        unwrap!(lines.next());
+        unwrap!(lines.next());
+        unwrap!(lines.next());
+    }
+    while let Some(line) = lines.next() {
+        let vec_of_string:Vec<&str> = line.trim_start_matches("[").trim_end_matches("]").split_terminator("][").collect();
+        let country = vec_of_string[0].to_string();
+        let density = vec_of_string[1];
+        let density = unwrap!(Decimal::from_str(&density));
+        vec_of_cou_den_rows.push(CouDenRow { country, density });
+    }
+
+    println!("Parsed from file with split: {}", file_name);
+    dbg!(vec_of_cou_den_rows);
+}
