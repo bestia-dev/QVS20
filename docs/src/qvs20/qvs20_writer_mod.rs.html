@@ -148,152 +148,47 @@
 <span id="148">148</span>
 <span id="149">149</span>
 <span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// qvs20_writer_mod</span>
 
-<span class="comment">// writes to utf8 String</span>
-
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">qvs20_table_rows_mod</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">qvs20_table_schema_mod</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use</span> <span class="ident">rust_decimal</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 <span class="comment">//use unwrap::unwrap;</span>
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WriterForQvs20</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">String</span>,
-    <span class="ident">schema</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TableSchema</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WriterForQvs20</span> {
+    <span class="comment">// writes to utf8 String</span>
+    <span class="ident">output</span>: <span class="ident">String</span>,
     <span class="ident">column</span>: <span class="ident">usize</span>,
     <span class="ident">row_delimiter</span>: <span class="ident">char</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">WriterForQvs20</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">WriterForQvs20</span> {
     <span class="comment">// constructor</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">String</span>, <span class="ident">schema</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TableSchema</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">row_delimiter</span> <span class="op">=</span> <span class="ident">schema</span>.<span class="ident">row_delimiter</span> <span class="kw">as</span> <span class="ident">char</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new_with_delimiter</span>(<span class="string">&#39;\n&#39;</span>)
+    }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with_delimiter</span>(<span class="ident">row_delimiter</span>: <span class="ident">char</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="comment">//return</span>
         <span class="ident">WriterForQvs20</span> {
-            <span class="ident">output</span>,
-            <span class="ident">schema</span>,
+            <span class="ident">output</span>: <span class="macro">s</span><span class="macro">!</span>(),
             <span class="ident">column</span>: <span class="number">0</span>,
             <span class="ident">row_delimiter</span>,
         }
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_schema</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">table_name</span>);
-        <span class="self">self</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">table_description</span>);
-        <span class="self">self</span>.<span class="ident">write_delimiter</span>();
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">data_types</span>.<span class="ident">iter</span>() {
-            <span class="self">self</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>.<span class="ident">to_string</span>());
-        }
-        <span class="self">self</span>.<span class="ident">write_delimiter</span>();
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">sub_table_schemas</span>.<span class="ident">iter</span>() {
-            <span class="kw">match</span> <span class="ident">x</span> {
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">write_string</span>(<span class="string">&quot;&quot;</span>),
-                <span class="prelude-val">Some</span>(<span class="ident">schema</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">write_sub_table_schema</span>(<span class="kw-2">&amp;</span><span class="ident">schema</span>),
-            }
-        }
-        <span class="self">self</span>.<span class="ident">write_delimiter</span>();
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">additional_properties</span>.<span class="ident">iter</span>() {
-            <span class="self">self</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>);
-        }
-        <span class="self">self</span>.<span class="ident">write_delimiter</span>();
-        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">column_names</span>.<span class="ident">iter</span>() {
-            <span class="self">self</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>);
-        }
-        <span class="self">self</span>.<span class="ident">write_delimiter</span>();
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">output_is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">is_empty</span>()
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_table_rows</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">table_rows</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TableRows</span>) {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">is_empty</span>() {
-            <span class="comment">// when TableRows are in separate file from Schema</span>
-            <span class="comment">// the 1st row has one field: TableName</span>
-            <span class="self">self</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">table_name</span>);
-            <span class="self">self</span>.<span class="ident">write_delimiter</span>();
-        }
-        <span class="kw">for</span> <span class="ident">row</span> <span class="kw">in</span> <span class="ident">table_rows</span>.<span class="ident">rows</span>.<span class="ident">iter</span>() {
-            <span class="kw">for</span> <span class="ident">value</span> <span class="kw">in</span> <span class="ident">row</span>.<span class="ident">values</span>.<span class="ident">iter</span>() {
-                <span class="kw">match</span> <span class="ident">value</span> {
-                    <span class="ident">Value</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>),
-                    <span class="ident">Value</span>::<span class="ident">Integer</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">write_integer</span>(<span class="kw-2">*</span><span class="ident">i</span>),
-                    <span class="ident">Value</span>::<span class="ident">Decimal</span>(<span class="ident">d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">write_decimal</span>(<span class="kw-2">*</span><span class="ident">d</span>),
-                    <span class="ident">Value</span>::<span class="ident">Float</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">write_float</span>(<span class="kw-2">*</span><span class="ident">f</span>),
-                    <span class="comment">/*
-                    Bool(bool),
-                    DateTimeFixedOffset(DateTime&lt;FixedOffset&gt;),
-                    Date(NaiveDate),
-                    Time(NaiveTime),
-                    SubTable(TableRows),
-                    */</span>
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
-                }
-            }
-            <span class="self">self</span>.<span class="ident">write_delimiter</span>();
-        }
+    <span class="doccomment">/// Move the String out of the writer struct, that will be soon dropped.</span>
+    <span class="doccomment">/// Never use it more than once !</span>
+    <span class="doccomment">/// I don&#39;t know a Rust technic to enforce that.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">return_and_finish</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="comment">// the Rust pattern to move out a struct field is to use mem:: replace</span>
+        <span class="comment">// because of the strict ownership</span>
+        <span class="comment">// it is then replaced with the new value. So never use it more than once!</span>
+        <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">output</span>, <span class="macro">s</span><span class="macro">!</span>())
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_table</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">table_rows</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TableRows</span>) {
-        <span class="self">self</span>.<span class="ident">write_schema</span>();
-        <span class="self">self</span>.<span class="ident">write_table_rows</span>(<span class="ident">table_rows</span>);
-    }
+    <span class="doccomment">/// write delimiter</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_delimiter</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">row_delimiter</span>);
         <span class="self">self</span>.<span class="ident">column</span> <span class="op">=</span> <span class="number">0</span>;
@@ -331,16 +226,22 @@
     <span class="doccomment">/// write a field of type String</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_sub_table_schema</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">schema</span>: <span class="kw-2">&amp;</span><span class="ident">TableSchema</span>) {
         <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">push</span>(<span class="string">&#39;[&#39;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output_sub_schema</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">with_capacity</span>(<span class="number">100</span>);
-        {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output_sub_schema</span>, <span class="kw-2">&amp;</span><span class="ident">schema</span>);
-            <span class="comment">//sub table start with delimiter</span>
-            <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
-            <span class="ident">wrt</span>.<span class="ident">write_schema</span>();
-        }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new_with_delimiter</span>(<span class="ident">schema</span>.<span class="ident">row_delimiter</span> <span class="kw">as</span> <span class="ident">char</span>);
+        <span class="comment">//sub table start with delimiter</span>
+        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+        <span class="ident">schema</span>.<span class="ident">write_schema_to_writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">wrt</span>,<span class="bool-val">true</span>);
+        <span class="kw">let</span> <span class="ident">output_sub_schema</span> <span class="op">=</span> <span class="ident">wrt</span>.<span class="ident">return_and_finish</span>();
+
         <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">output_sub_schema</span>);
         <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">push</span>(<span class="string">&#39;]&#39;</span>);
         <span class="self">self</span>.<span class="ident">column</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+    }
+    <span class="doccomment">/// write a vector of string as one row</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_vec_of_string_as_row</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">row_data</span>: <span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) {
+        <span class="kw">for</span> <span class="ident">data</span> <span class="kw">in</span> <span class="ident">row_data</span>.<span class="ident">iter</span>() {
+            <span class="self">self</span>.<span class="ident">write_string</span>(<span class="ident">data</span>);
+        }
+        <span class="self">self</span>.<span class="ident">write_delimiter</span>();
     }
     <span class="doccomment">/// escape the 6 special characters \\, \[, \], \n, \r, \t</span>
     <span class="doccomment">/// all this characters are ascii7</span>
@@ -388,38 +289,15 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t01_write_data_string_escaped</span>() {
-        <span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">new_simple_strings</span>(<span class="number">3</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">with_capacity</span>(<span class="number">1000</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>, <span class="kw-2">&amp;</span><span class="ident">schema</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>();
         <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;three&quot;</span>);
         <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;o\\n[e]&quot;</span>);
         <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;t\nw\to\r&quot;</span>);
         <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+        <span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">wrt</span>.<span class="ident">return_and_finish</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="string">&quot;[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n&quot;</span>);
     }
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t02_write_schema</span>() {
-        <span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">new_simple_strings</span>(<span class="number">3</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">with_capacity</span>(<span class="number">1000</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>, <span class="kw-2">&amp;</span><span class="ident">schema</span>);
-        <span class="ident">wrt</span>.<span class="ident">write_schema</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">output</span>,
-            <span class="string">&quot;[t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n&quot;</span>
-        );
-    }
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t03_write_schema_and_data</span>() {
-        <span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">new_simple_strings</span>(<span class="number">3</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">with_capacity</span>(<span class="number">1000</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>, <span class="kw-2">&amp;</span><span class="ident">schema</span>);
-        <span class="ident">wrt</span>.<span class="ident">write_schema</span>();
-        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;three&quot;</span>);
-        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;o\\n[e]&quot;</span>);
-        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;t\nw\to\r&quot;</span>);
-        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="string">&quot;[t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n&quot;</span>);
-    }
+    
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "qvs20";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

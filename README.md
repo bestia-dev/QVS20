@@ -1,19 +1,21 @@
+[comment]: # (lmake_md_to_doc_comments segment start A)
+
 # QVS20 - Modern replacement for csv for the year 2020  
 
 sQuare brackets Separated Values 2020  
 
 [comment]: # (lmake_readme cargo.toml data start)
-***version: 0.0.8  date: 2020-07-12 authors: Luciano Bestia***  
+***version: 0.0.8  date: 2020-07-16 authors: Luciano Bestia***  
 **Modern replacement for csv for the year 2020**
 
 [comment]: # (lmake_readme cargo.toml data end)
 
 [comment]: # (lmake_lines_of_code start)
-[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-1514-green.svg)](https://github.com/LucianoBestia/QVS20/)
-[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-580-blue.svg)](https://github.com/LucianoBestia/QVS20/)
-[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-204-purple.svg)](https://github.com/LucianoBestia/QVS20/)
-[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-993-yellow.svg)](https://github.com/LucianoBestia/QVS20/)
-[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-811-orange.svg)](https://github.com/LucianoBestia/QVS20/)
+[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-1574-green.svg)](https://github.com/LucianoBestia/QVS20/)
+[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-612-blue.svg)](https://github.com/LucianoBestia/QVS20/)
+[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-211-purple.svg)](https://github.com/LucianoBestia/QVS20/)
+[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-954-yellow.svg)](https://github.com/LucianoBestia/QVS20/)
+[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-812-orange.svg)](https://github.com/LucianoBestia/QVS20/)
 
 [comment]: # (lmake_lines_of_code end)
   
@@ -480,7 +482,7 @@ Integration in database tools, spreadsheet apps and client-server frameworks wou
 It is really important for the standard to be popular.  
 I hope the standard will be interesting to many and they will organically spread the word.  
 
-[comment]: # (lmake_readme exclude start A)
+[comment]: # (lmake_md_to_doc_comments segment end A)
 
 ## Read also the separate XXX.md files
 
@@ -490,5 +492,3 @@ So I cannot include the specific information that are not common to all 3 purpos
 - DEVELOPMENT.md - information and instruction for development
 - CHANGELOG.md - what changed between versions
 - TODO.md - reminder of what is in plan to do
-
-[comment]: # (lmake_readme exclude end A)

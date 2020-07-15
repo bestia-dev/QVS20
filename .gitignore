@@ -11,3 +11,7 @@
 
 # result of compilation does not need to go to repository
 /pkg/
+
+# this is for vscode markdown preview
+markdown.css
+highlight.css

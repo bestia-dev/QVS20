@@ -33,7 +33,7 @@ pub struct TableSchema {
     /// row_delimiter
     pub row_delimiter: u8,
     /// sub table row delimiter
-    sub_table_row_delimiter: u8,
+    pub sub_table_row_delimiter: u8,
 }
 
 #[derive(Clone, Debug, EnumString, Display, Eq, PartialEq)]

@@ -1,20 +1,17 @@
-// region: lmake_readme include "README.md" //! A
+// region: lmake_md_to_doc_comments include README.md A //!
 //! # QVS20 - Modern replacement for csv for the year 2020  
 //!
 //! sQuare brackets Separated Values 2020  
 //!
-//! ***version: 0.0.8  date: 2020-07-12 authors: Luciano Bestia***  
+//! ***version: 0.0.8  date: 2020-07-16 authors: Luciano Bestia***  
 //! **Modern replacement for csv for the year 2020**
 //!
+//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-1574-green.svg)](https://github.com/LucianoBestia/QVS20/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-612-blue.svg)](https://github.com/LucianoBestia/QVS20/)
+//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-211-purple.svg)](https://github.com/LucianoBestia/QVS20/)
+//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-954-yellow.svg)](https://github.com/LucianoBestia/QVS20/)
+//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-812-orange.svg)](https://github.com/LucianoBestia/QVS20/)
 //!
-//! [comment]: # (lmake_lines_of_code start)
-//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-1514-green.svg)](https://github.com/LucianoBestia/QVS20/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-580-blue.svg)](https://github.com/LucianoBestia/QVS20/)
-//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-204-purple.svg)](https://github.com/LucianoBestia/QVS20/)
-//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-993-yellow.svg)](https://github.com/LucianoBestia/QVS20/)
-//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-811-orange.svg)](https://github.com/LucianoBestia/QVS20/)
-//!
-//! [comment]: # (lmake_lines_of_code end)
 //!   
 //! My proposed format for import/export of 2 dimensional database tables.  
 //!   
@@ -371,7 +368,7 @@
 //!   
 //! The Schema is write always in 5 mandatory rows:  
 //!
-//! - 1st row - table name  
+//! - 1st row - file type, table name and description  
 //! - 2st row - data types  
 //! - 3nd row - sub table schemas  
 //! - 4nd row - additional data  
@@ -380,14 +377,22 @@
 //! The Schema is mandatory.  
 //! It can be included in the same `QVS20` file or can exist in an external `QVS20` file.  
 //! That way is possible to have files with only data. Great for small packets of data.  
+//! There is no other configuration needed to operate with qvs20.  
 //!
-//! ### Schema 1st row - table name and description
+//! ### Schema 1st row - file type, table name and description
 //!
 //! It is great to recognize the data from inside the data itself.  
 //! The file name can change for various reasons and is not always coherent.  
-//! Only two fields are in the first row.  
+//! There are 3 possible file types for qvs20:  
+//!
+//! 1. only schema - is marked with [S]
+//! 2. only rows - is marked with [R]
+//! 3. full (schema+rows) - is marked with [T]
+//! 4. sub_table schema - is marked with [U], but it cannot be a standalone file
+//!
+//! The marker helps the parser to early recognize the file and its content.  
 //! The table name is short and is used to assert that the separate TableRows file and the TableSchema file are really from the same Table.  
-//! The description can be long if is needed.  
+//! The description can be long if is needed. It is a string, therefore it is escaped.  
 //!
 //! ### Schema 2nd row - Data types
 //!
@@ -426,10 +431,18 @@
 //!
 //! The actual data is write in TableRows. This can be in a separate file or in the same file after the schema.  
 //!
-//! ### TableRows 1st row - table name - only when in separate file without Schema
+//! ### TableRows 1st row - file type, table name
 //!
-//! When TableRows are in separate file, the first row contains only one field: the TableName.  
-//! So we can check if the Schema and the Rows are from the same table when they are in separate files.  
+//! There are 3 possible file types for qvs20:  
+//!
+//! 1. only schema - is marked with [S]
+//! 2. only rows - is marked with [R]
+//! 3. full (schema+rows) - is marked with [T]
+//! 4. sub_table schema - is marked with [U], but it cannot be a standalone file
+//!
+//! The marker helps the parser to early recognize the file and its content.  
+//! When TableRows are in separate file, the first row contains only file type and table name. No need for description here, because is already in the schema.  
+//! With the table name we can check if the Schema and the Rows are from the same table when they are in separate files.  
 //! When the schema and table are together in the same file, this row is not needed.  
 //!
 //! ## Versions  
@@ -463,7 +476,7 @@
 //! It is really important for the standard to be popular.  
 //! I hope the standard will be interesting to many and they will organically spread the word.  
 //!
-// endregion: lmake_readme include "README.md" //! A
+// endregion: lmake_md_to_doc_comments include README.md A //!
 
 /// short macro `s!()` for &str.to_string or format!().
 /// because that is so common.
@@ -514,4 +527,5 @@ pub use qvs20_table_rows_mod::Row;
 pub use qvs20_table_rows_mod::TableRows;
 pub use qvs20_table_rows_mod::Value;
 pub use qvs20_table_schema_mod::TableSchema;
+pub use qvs20_table_schema_mod::DataType;
 pub use qvs20_writer_mod::WriterForQvs20;

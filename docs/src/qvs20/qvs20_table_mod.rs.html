@@ -395,6 +395,29 @@
 <span id="395">395</span>
 <span id="396">396</span>
 <span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// qvs20_table_mod</span>
 
@@ -406,6 +429,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">qvs20_reader_mod</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">qvs20_table_rows_mod</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">qvs20_table_schema_mod</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">qvs20_writer_mod</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// The Table type contains TableSchema and TableRows.</span>
 <span class="doccomment">///</span>
@@ -453,6 +477,15 @@
         <span class="comment">//return</span>
         <span class="prelude-val">Ok</span>(<span class="ident">table</span>)
     }
+
+    <span class="doccomment">/// write to String</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_table</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>();
+        <span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">write_schema_to_writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">wrt</span>, <span class="bool-val">false</span>);
+        <span class="self">self</span>.<span class="ident">table_rows</span>.<span class="ident">write_table_rows_to_writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">wrt</span>);
+        <span class="comment">//return</span>
+        <span class="ident">wrt</span>.<span class="ident">return_and_finish</span>()
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -462,7 +495,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t01_string_table</span>() {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;[table_name][table_description]
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;[T][table_name][table_description]
 [String][String]
 [][]
 [blue][red]
@@ -476,7 +509,7 @@
     }
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t02_all_wrong_in_data_rows</span>() {
-        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[table name][description]\n[String][String][String]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[T][table name][description]\n[String][String][String]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[string1&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -578,7 +611,7 @@
     }
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t03_data_type_integer</span>() {
-        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[table name][description]\n[Integer][Integer][Integer]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[T][table name][description]\n[Integer][Integer][Integer]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[11][22][a]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -611,7 +644,7 @@
     }
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t04_data_type_decimal</span>() {
-        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[table name][description]\n[Decimal][Decimal][Decimal]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[T][table name][description]\n[Decimal][Decimal][Decimal]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[11.1][22.22][a]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -645,7 +678,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t05_data_type_float</span>() {
         <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span>
-            <span class="string">&quot;[table name][description]\n[Float][Float][Float]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+            <span class="string">&quot;[T][table name][description]\n[Float][Float][Float]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[1.1e2][22.22][a]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -671,7 +704,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t06_data_type_bool</span>() {
         <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span>
-            <span class="string">&quot;[table name][description]\n[Bool][Bool][Bool]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+            <span class="string">&quot;[T][table name][description]\n[Bool][Bool][Bool]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[T][F][a]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -699,7 +732,7 @@
     }
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t07_data_type_datetime</span>() {
-        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[table name][description]\n[DateTimeFixedOffset][DateTimeFixedOffset][DateTimeFixedOffset]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[T][table name][description]\n[DateTimeFixedOffset][DateTimeFixedOffset][DateTimeFixedOffset]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[2014-11-28T21:00:09+09:00][2020-06-27T23:59:59+03:30][2014-11-28T21:00:09]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -737,7 +770,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t08_data_type_date</span>() {
         <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span>
-            <span class="string">&quot;[table name][description]\n[Date][Date][Date]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+            <span class="string">&quot;[T][table name][description]\n[Date][Date][Date]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[2014-11-28][2020-06-27][2014-11-28+1]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -766,7 +799,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t09_data_type_time</span>() {
         <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span>
-            <span class="string">&quot;[table name][description]\n[Time][Time][Time]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
+            <span class="string">&quot;[T][table name][description]\n[Time][Time][Time]\n[][][]\n[prop1][prop2][prop3]\n[name1][name2][name3]\n&quot;</span>;
         <span class="comment">// rows of data active_row 0</span>
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">&quot;[23:59:59][23:59:59.123456][23:59]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="ident">data</span>);
@@ -791,6 +824,19 @@
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
             <span class="string">&quot;Error: Failed conversion to time. input contains invalid characters. row 0 col 2&quot;</span>
         );
+    }
+    
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t03_write_schema_and_data</span>() {
+        <span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">new_simple_strings</span>(<span class="number">3</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>();
+        <span class="ident">schema</span>.<span class="ident">write_schema_to_writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">wrt</span>,<span class="bool-val">false</span>);
+        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;three&quot;</span>);
+        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;o\\n[e]&quot;</span>);
+        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;t\nw\to\r&quot;</span>);
+        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+        <span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">wrt</span>.<span class="ident">return_and_finish</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="string">&quot;[T][t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n[three][o\\\\n\\[e\\]][t\\nw\\to\\r]\n&quot;</span>);
     }
 }
 </pre></div>

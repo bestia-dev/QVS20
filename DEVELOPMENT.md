@@ -4,7 +4,7 @@
 
 Use this examples to learn how to use the qvs20 format and library.  
 
-[comment]: # (lmake_md_to_doc_comments start A)
+[comment]: # (lmake_md_to_doc_comments segment start A)
 
 ### 1. naive csv replacement
 
@@ -22,18 +22,18 @@ For reading the text needs to be parsed. There is a lot of different options for
 
 `clear; cargo run --example example_01_naive_no_lib`  
 
-[comment]: # (lmake_md_to_doc_comments end A)
+[comment]: # (lmake_md_to_doc_comments segment end A)
 
-[comment]: # (lmake_md_to_doc_comments start B)
+[comment]: # (lmake_md_to_doc_comments segment start B)
 
 ### 2. using reader and writer library
 
 It is wise to put repetitive code in a library. The first library is low level. Just read and write. Usage of libraries makes it possible to gradually enhance it with more complex data-types and methods as needed. The library encapsulate the code to parse and escape/unescape.  
 `clear; cargo run --example example_02_reader_writer`  
 
-[comment]: # (lmake_md_to_doc_comments end B)
+[comment]: # (lmake_md_to_doc_comments segment end B)
 
-[comment]: # (lmake_md_to_doc_comments start C)
+[comment]: # (lmake_md_to_doc_comments segment start C)
 
 ### 3. using the qvs20_Table library
 
@@ -44,27 +44,28 @@ It means that sometimes a change in the table does not dictate change in source 
 I am sure it is not the most efficient way of working with large amounts of data, but the flexibility is sometimes more important.  
 `clear; cargo run --example example_03_qvs20_table`  
 
-[comment]: # (lmake_md_to_doc_comments end C)
+[comment]: # (lmake_md_to_doc_comments segment end C)
 
-[comment]: # (lmake_md_to_doc_comments start D)
+[comment]: # (lmake_md_to_doc_comments segment start D)
 
 ### 4. Manually write an implementation for a struct
 
 Having a struct for rows and one for vector of rows, it is fairly easy to write an implementation that reads and writes data to the qvs20 format. Most of the code is just boilerplate.  
 `clear; cargo run --example example_04_manual_derive`  
 
-[comment]: # (lmake_md_to_doc_comments end D)
+[comment]: # (lmake_md_to_doc_comments segment end D)
 
-[comment]: # (lmake_md_to_doc_comments start E)
+[comment]: # (lmake_md_to_doc_comments segment start E)
 
 ### 5. Derive macro
 
-Rust can codegen (code generation) the implementation in compile time, so the developer don't need to do it manually. It is achieved by a procedural derive macro in a separate crate.  
-
+Rust can codegen (code generation) the implementation in compile time, so the developer don't need to do it manually.  
+It is achieved by a procedural derive macro in a separate crate: qvs20_derive.  
+`clear; cargo run --example example_07_derive_macro`  
 Expand derive macro:  
-`clear; cargo expand --example example_07_derive_macro`  
+`clear; cargo expand --example example_05_derive_macro`  
 
-[comment]: # (lmake_md_to_doc_comments end E)
+[comment]: # (lmake_md_to_doc_comments segment end E)
 
 ## cargo make - for non-trivial or multi-line commands
 

@@ -1,8 +1,16 @@
 // example_03_qvs20_table
 
-// region: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! C
-
-// endregion: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! C
+// region: lmake_md_to_doc_comments include DEVELOPMENT.md C //!
+//! ### 3. using the qvs20_Table library
+//!
+//! The qvs20 Table is in memory struct that contains all the data and their properties for the qvs20 format: table schema and table rows.  
+//! The table structure is very flexible, because it is defined in runtime.
+//! A lot of times the table is used just as an intermediary, and don't need a fixed Rust struct in compile time.  
+//! It means that sometimes a change in the table does not dictate change in source code and consequently Rust slow compilation.  
+//! I am sure it is not the most efficient way of working with large amounts of data, but the flexibility is sometimes more important.  
+//! `clear; cargo run --example example_03_qvs20_table`  
+//!
+// endregion: lmake_md_to_doc_comments include DEVELOPMENT.md C //!
 
 use qvs20::Value;
 use qvs20::*;

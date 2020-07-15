@@ -610,6 +610,58 @@
 <span id="610">610</span>
 <span id="611">611</span>
 <span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// qvs20_table_schema_mod</span>
 
@@ -719,7 +771,7 @@
     <span class="kw">fn</span> <span class="ident">active_row_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="comment">// humans count from 1, machines count from 0</span>
         <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">active_row</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;1st row - table name and description&quot;</span>,
+            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;1st row - file_type, table name and description&quot;</span>,
             <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;2nd row - data types&quot;</span>,
             <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;3rd row - SubTable schemas&quot;</span>,
             <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;4th row - additional properties&quot;</span>,
@@ -743,8 +795,10 @@
             <span class="kw">match</span> <span class="ident">result</span><span class="question-mark">?</span> {
                 <span class="ident">ValueForSchema</span>::<span class="ident">String</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="self">self</span>.<span class="ident">active_column</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                        <span class="self">self</span>.<span class="ident">table_name</span> <span class="op">=</span> <span class="ident">value</span>;
+                        <span class="kw">let</span> <span class="ident">_file_type</span> <span class="op">=</span> <span class="ident">value</span>;
                     } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">active_column</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+                        <span class="self">self</span>.<span class="ident">table_name</span> <span class="op">=</span> <span class="ident">value</span>;
+                    } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">active_column</span> <span class="op">=</span><span class="op">=</span> <span class="number">2</span> {
                         <span class="self">self</span>.<span class="ident">table_description</span> <span class="op">=</span> <span class="ident">value</span>;
                     }
                     <span class="self">self</span>.<span class="ident">active_column</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -926,10 +980,10 @@
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">ValueForSchema</span>::<span class="ident">String</span>(<span class="ident">value</span>)));
             }
             <span class="ident">Token</span>::<span class="ident">RowDelimiter</span>(<span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="comment">// 1st row must have 2 columns</span>
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">active_row</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">active_column</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> {
+                <span class="comment">// 1st row must have 3 columns</span>
+                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">active_row</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">active_column</span> <span class="op">!</span><span class="op">=</span> <span class="number">3</span> {
                     <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">Qvs20Error</span>::<span class="ident">Error</span> {
-                        <span class="ident">msg</span>: <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Schema {} must have 2 columns.&quot;</span>, <span class="self">self</span>.<span class="ident">active_row_str</span>()),
+                        <span class="ident">msg</span>: <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Schema {} must have 3 columns.&quot;</span>, <span class="self">self</span>.<span class="ident">active_row_str</span>()),
                     }));
                 }
                 <span class="comment">// all other rows must have same column count as the 2nd row - data types</span>
@@ -1028,6 +1082,45 @@
             }
         }
     }
+
+    <span class="comment">// write standalone schema to String</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_schema</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>();
+        <span class="self">self</span>.<span class="ident">write_schema_to_writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">wrt</span>, <span class="bool-val">true</span>);
+        <span class="comment">//return</span>
+        <span class="ident">wrt</span>.<span class="ident">return_and_finish</span>()
+    }
+
+    <span class="doccomment">/// write to writer</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_schema_to_writer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">wrt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">WriterForQvs20</span>, <span class="ident">schema_only</span>:<span class="ident">bool</span>) {
+        <span class="kw">if</span> <span class="ident">schema_only</span><span class="op">=</span><span class="op">=</span><span class="bool-val">true</span>{
+            <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;S&quot;</span>);
+        }<span class="kw">else</span>{
+            <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;T&quot;</span>);
+        }
+        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">table_name</span>);
+        <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">table_description</span>);
+        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">data_types</span>.<span class="ident">iter</span>() {
+            <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>.<span class="ident">to_string</span>());
+        }
+        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">sub_table_schemas</span>.<span class="ident">iter</span>() {
+            <span class="kw">match</span> <span class="ident">x</span> {
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="string">&quot;&quot;</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">schema</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">wrt</span>.<span class="ident">write_sub_table_schema</span>(<span class="kw-2">&amp;</span><span class="ident">schema</span>),
+            }
+        }
+        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">additional_properties</span>.<span class="ident">iter</span>() {
+            <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>);
+        }
+        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+        <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">column_names</span>.<span class="ident">iter</span>() {
+            <span class="ident">wrt</span>.<span class="ident">write_string</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>);
+        }
+        <span class="ident">wrt</span>.<span class="ident">write_delimiter</span>();
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -1042,47 +1135,47 @@
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
-            <span class="string">&quot;Error: Missing mandatory Schema 1st row - table name and description.&quot;</span>
+            <span class="string">&quot;Error: Missing mandatory Schema 1st row - file_type, table name and description.&quot;</span>
         );
 
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;bad-formed text&quot;</span>;
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
-            <span class="string">&quot;Error: Schema 1st row - table name and description The field must start with [. ./file.qvs20:0:0&quot;</span>
+            <span class="string">&quot;Error: Schema 1st row - file_type, table name and description The field must start with [. ./file.qvs20:0:0&quot;</span>
         );
 
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;[bad-formed text&quot;</span>;
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
-            <span class="string">&quot;Error: Schema 1st row - table name and description Last bracket is missing. ./file.qvs20:0:1&quot;</span>
+            <span class="string">&quot;Error: Schema 1st row - file_type, table name and description Last bracket is missing. ./file.qvs20:0:1&quot;</span>
         );
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;[no sec col]&quot;</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;[S]&quot;</span>;
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
-            <span class="string">&quot;Error: Schema 1st row - table name and description Last row delimiter is missing. ./file.qvs20:0:12&quot;</span>
+            <span class="string">&quot;Error: Schema 1st row - file_type, table name and description Last row delimiter is missing. ./file.qvs20:0:3&quot;</span>
         );
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;[name][desc]&quot;</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">r&quot;[S][name][desc]&quot;</span>;
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
-            <span class="string">&quot;Error: Schema 1st row - table name and description Last row delimiter is missing. ./file.qvs20:0:12&quot;</span>
+            <span class="string">&quot;Error: Schema 1st row - file_type, table name and description Last row delimiter is missing. ./file.qvs20:0:15&quot;</span>
         );
 
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">&quot;[name][row delimiter too big]\n\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">&quot;[S][name][row delimiter too big]\n\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
-            <span class="string">&quot;Error: Schema 1st row - table name and description The row delimiter has more than 1 byte. ./file.qvs20:0:29&quot;</span>
+            <span class="string">&quot;Error: Schema 1st row - file_type, table name and description The row delimiter has more than 1 byte. ./file.qvs20:0:32&quot;</span>
         );
 
         <span class="comment">// error in Schema 2nd row - data types</span>
         <span class="comment">// good table_name, but no 2nd row</span>
-        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[table name][description]\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[S][table name][description]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="string">&quot;&quot;</span>);
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1128,7 +1221,7 @@
         <span class="comment">// for Schema 3rd row -sub table schema there is separate test</span>
 
         <span class="comment">// error in Schema 4th row - additional properties</span>
-        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[table name][description]\n[String][Integer][Decimal]\n[][][]\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[S][table name][description]\n[String][Integer][Decimal]\n[][][]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="string">&quot;&quot;</span>);
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1173,7 +1266,7 @@
         );
 
         <span class="comment">// Schema 5th row: column names</span>
-        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[table name][description]\n[String][Integer][Decimal]\n[][][]\n[prop1][prop2][prop3]\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">pre_string</span> <span class="op">=</span> <span class="string">&quot;[S][table name][description]\n[String][Integer][Decimal]\n[][][]\n[prop1][prop2][prop3]\n&quot;</span>;
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">pre_string</span>, <span class="string">&quot;&quot;</span>);
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">schema_from_qvs20_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1220,6 +1313,17 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">remove_src_loc</span>(<span class="ident">err</span>),
             <span class="string">&quot;Error: Schema 5th row - column names The row delimiter has more than 1 byte. ./file.qvs20:4:22&quot;</span>
+        );
+    }
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">t02_write_schema</span>() {
+        <span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">TableSchema</span>::<span class="ident">new_simple_strings</span>(<span class="number">3</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wrt</span> <span class="op">=</span> <span class="ident">WriterForQvs20</span>::<span class="ident">new</span>();
+        <span class="ident">schema</span>.<span class="ident">write_schema_to_writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">wrt</span>,<span class="bool-val">true</span>);
+        <span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">wrt</span>.<span class="ident">return_and_finish</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">output</span>,
+            <span class="string">&quot;[S][t1][simple table-only strings]\n[String][String][String]\n[][][]\n[][][]\n[1][2][3]\n&quot;</span>
         );
     }
 }

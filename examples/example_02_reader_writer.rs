@@ -1,8 +1,12 @@
 // example_02_reader_writer
 
-// region: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! B
-
-// endregion: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! B
+// region: lmake_md_to_doc_comments include DEVELOPMENT.md B //!
+//! ### 2. using reader and writer library
+//!
+//! It is wise to put repetitive code in a library. The first library is low level. Just read and write. Usage of libraries makes it possible to gradually enhance it with more complex data-types and methods as needed. The library encapsulate the code to parse and escape/unescape.  
+//! `clear; cargo run --example example_02_reader_writer`  
+//!
+// endregion: lmake_md_to_doc_comments include DEVELOPMENT.md B //!
 
 use qvs20::ReaderForQvs20;
 use qvs20::WriterForQvs20;

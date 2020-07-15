@@ -1,8 +1,23 @@
 // example_01_naive_no_lib
 
-// region: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! A
-
-// endregion: lmake_md_to_doc_comments include "DEVELOPMENT.md" //! A
+// region: lmake_md_to_doc_comments include DEVELOPMENT.md A //!
+//! ### 1. naive csv replacement
+//!
+//! We start with the naive replacement of csv. No library involved.  
+//! Super easy manually written code to write and read qvs20, but not "full standard".  
+//! Remember that the goal of qvs20 is to import/export data from database tables.  
+//! This naive approach can satisfy 99% of use-cases. It is extremely easy to write in any language. But it can lead to incompatibilities, so is better to use a library that is 100% standard compliant.  
+//! Most of the data is Strings or simple decimals. No complicated data types like datetime or hierarchical SubTable. They can always be represented as Strings. Just look at the JSON standard.  
+//! Writing qvs20 is super easy. Not much to say here.  
+//! For reading the text needs to be parsed. There is a lot of different options for such a simple format:  
+//!
+//! 1. with the find() method.  
+//! 2. with regex.  
+//! 3. with split.  
+//!
+//! `clear; cargo run --example example_01_naive_no_lib`  
+//!
+// endregion: lmake_md_to_doc_comments include DEVELOPMENT.md A //!
 
 use rust_decimal::prelude::*;
 use std::fs;

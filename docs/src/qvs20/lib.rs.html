@@ -513,24 +513,36 @@
 <span id="513">513</span>
 <span id="514">514</span>
 <span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="comment">// region: lmake_readme include &quot;README.md&quot; //! A</span>
+<span class="comment">// region: lmake_md_to_doc_comments include README.md A //!</span>
 <span class="doccomment">//! # QVS20 - Modern replacement for csv for the year 2020  </span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! sQuare brackets Separated Values 2020  </span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ***version: 0.0.8  date: 2020-07-12 authors: Luciano Bestia***  </span>
+<span class="doccomment">//! ***version: 0.0.8  date: 2020-07-16 authors: Luciano Bestia***  </span>
 <span class="doccomment">//! **Modern replacement for csv for the year 2020**</span>
 <span class="doccomment">//!</span>
+<span class="doccomment">//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-1574-green.svg)](https://github.com/LucianoBestia/QVS20/)</span>
+<span class="doccomment">//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-612-blue.svg)](https://github.com/LucianoBestia/QVS20/)</span>
+<span class="doccomment">//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-211-purple.svg)](https://github.com/LucianoBestia/QVS20/)</span>
+<span class="doccomment">//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-954-yellow.svg)](https://github.com/LucianoBestia/QVS20/)</span>
+<span class="doccomment">//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-812-orange.svg)](https://github.com/LucianoBestia/QVS20/)</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! [comment]: # (lmake_lines_of_code start)</span>
-<span class="doccomment">//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-1514-green.svg)](https://github.com/LucianoBestia/QVS20/)</span>
-<span class="doccomment">//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-580-blue.svg)](https://github.com/LucianoBestia/QVS20/)</span>
-<span class="doccomment">//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-204-purple.svg)](https://github.com/LucianoBestia/QVS20/)</span>
-<span class="doccomment">//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-993-yellow.svg)](https://github.com/LucianoBestia/QVS20/)</span>
-<span class="doccomment">//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-811-orange.svg)](https://github.com/LucianoBestia/QVS20/)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [comment]: # (lmake_lines_of_code end)</span>
 <span class="doccomment">//!   </span>
 <span class="doccomment">//! My proposed format for import/export of 2 dimensional database tables.  </span>
 <span class="doccomment">//!   </span>
@@ -887,7 +899,7 @@
 <span class="doccomment">//!   </span>
 <span class="doccomment">//! The Schema is write always in 5 mandatory rows:  </span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! - 1st row - table name  </span>
+<span class="doccomment">//! - 1st row - file type, table name and description  </span>
 <span class="doccomment">//! - 2st row - data types  </span>
 <span class="doccomment">//! - 3nd row - sub table schemas  </span>
 <span class="doccomment">//! - 4nd row - additional data  </span>
@@ -896,14 +908,22 @@
 <span class="doccomment">//! The Schema is mandatory.  </span>
 <span class="doccomment">//! It can be included in the same `QVS20` file or can exist in an external `QVS20` file.  </span>
 <span class="doccomment">//! That way is possible to have files with only data. Great for small packets of data.  </span>
+<span class="doccomment">//! There is no other configuration needed to operate with qvs20.  </span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ### Schema 1st row - table name and description</span>
+<span class="doccomment">//! ### Schema 1st row - file type, table name and description</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! It is great to recognize the data from inside the data itself.  </span>
 <span class="doccomment">//! The file name can change for various reasons and is not always coherent.  </span>
-<span class="doccomment">//! Only two fields are in the first row.  </span>
+<span class="doccomment">//! There are 3 possible file types for qvs20:  </span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 1. only schema - is marked with [S]</span>
+<span class="doccomment">//! 2. only rows - is marked with [R]</span>
+<span class="doccomment">//! 3. full (schema+rows) - is marked with [T]</span>
+<span class="doccomment">//! 4. sub_table schema - is marked with [U], but it cannot be a standalone file</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The marker helps the parser to early recognize the file and its content.  </span>
 <span class="doccomment">//! The table name is short and is used to assert that the separate TableRows file and the TableSchema file are really from the same Table.  </span>
-<span class="doccomment">//! The description can be long if is needed.  </span>
+<span class="doccomment">//! The description can be long if is needed. It is a string, therefore it is escaped.  </span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### Schema 2nd row - Data types</span>
 <span class="doccomment">//!</span>
@@ -942,10 +962,18 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The actual data is write in TableRows. This can be in a separate file or in the same file after the schema.  </span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ### TableRows 1st row - table name - only when in separate file without Schema</span>
+<span class="doccomment">//! ### TableRows 1st row - file type, table name</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! When TableRows are in separate file, the first row contains only one field: the TableName.  </span>
-<span class="doccomment">//! So we can check if the Schema and the Rows are from the same table when they are in separate files.  </span>
+<span class="doccomment">//! There are 3 possible file types for qvs20:  </span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 1. only schema - is marked with [S]</span>
+<span class="doccomment">//! 2. only rows - is marked with [R]</span>
+<span class="doccomment">//! 3. full (schema+rows) - is marked with [T]</span>
+<span class="doccomment">//! 4. sub_table schema - is marked with [U], but it cannot be a standalone file</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The marker helps the parser to early recognize the file and its content.  </span>
+<span class="doccomment">//! When TableRows are in separate file, the first row contains only file type and table name. No need for description here, because is already in the schema.  </span>
+<span class="doccomment">//! With the table name we can check if the Schema and the Rows are from the same table when they are in separate files.  </span>
 <span class="doccomment">//! When the schema and table are together in the same file, this row is not needed.  </span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Versions  </span>
@@ -979,7 +1007,7 @@
 <span class="doccomment">//! It is really important for the standard to be popular.  </span>
 <span class="doccomment">//! I hope the standard will be interesting to many and they will organically spread the word.  </span>
 <span class="doccomment">//!</span>
-<span class="comment">// endregion: lmake_readme include &quot;README.md&quot; //! A</span>
+<span class="comment">// endregion: lmake_md_to_doc_comments include README.md A //!</span>
 
 <span class="doccomment">/// short macro `s!()` for &amp;str.to_string or format!().</span>
 <span class="doccomment">/// because that is so common.</span>
@@ -1026,7 +1054,9 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_reader_mod</span>::<span class="ident">Qvs20Error</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_reader_mod</span>::<span class="ident">ReaderForQvs20</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_table_mod</span>::<span class="ident">Table</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_table_rows_mod</span>::<span class="ident">Row</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_table_rows_mod</span>::<span class="ident">TableRows</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_table_rows_mod</span>::<span class="ident">Value</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_table_schema_mod</span>::<span class="ident">TableSchema</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">qvs20_writer_mod</span>::<span class="ident">WriterForQvs20</span>;
 </pre></div>
