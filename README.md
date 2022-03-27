@@ -5,8 +5,9 @@
 sQuare brackets Separated Values 2020  
 
 [comment]: # (lmake_readme cargo.toml data start)
-***version: 0.0.8  date: 2020-07-16 authors: Luciano Bestia***  
-**Modern replacement for csv for the year 2020**
+
+**Modern replacement for csv for the year 2020**  
+***version: 0.0.8  date: 2020-07-16 author: [dev_Bestia](https://bestia.dev) repository: [GitHub](https://github.com/LucianoBestia/qvs20)***  
 
 [comment]: # (lmake_readme cargo.toml data end)
 
