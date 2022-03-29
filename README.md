@@ -20,6 +20,8 @@ sQuare brackets Separated Values 2020
 
 [comment]: # (lmake_lines_of_code end)
   
+[![crates.io](https://meritbadge.herokuapp.com/qvs20)](https://crates.io/crates/qvs20) [![Documentation](https://docs.rs/qvs20/badge.svg)](https://docs.rs/qvs20/) [![crev reviews](https://web.crev.dev/rust-reviews/badge/crev_count/qvs20.svg)](https://web.crev.dev/rust-reviews/crate/qvs20/) [![Lib.rs](https://img.shields.io/badge/Lib.rs-rust-orange.svg)](https://lib.rs/crates/qvs20/) [![Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/LucianoBestia/qvs20/blob/master/LICENSE) [![Rust](https://github.com/LucianoBestia/qvs20/workflows/Rust/badge.svg)](https://github.com/LucianoBestia/qvs20/)
+
 My proposed format for import/export of 2 dimensional database tables.  
   
 ## The name QVS20  
@@ -302,82 +304,13 @@ Null in database language means `absence of data` and is very important.
 Empty brackets [] represent Null in `QVS20`.  
 For strings there is no difference between Null and EmptyString in `QVS20`.  
 
-## Data type SubTable
-  
-Inside one cell of the table is possible to insert a whole sub-table.  
-Just like that. Nothing changes, no special escaping, because we have start and end delimiters.  
-So we can represent also hierarchical data, if it is really needed.  
-Still the primary goal of the standard is tabular data.  
-Yes, but one tiny thing must change: the row delimiter of the sub-table is not \n anymore.  
-It is the number that represent the depth of the sub-table: 1, 2, 3,...  
-It must be only one byte. This format is not really great for hierarchies deeper than 9 levels.  
-
-Example of CountryTable:  
-
-```QVS20
-[Country][Population]  
-[Slovenia][2000000]  
-[Italia][60000000]  
-[Croatia][4000000]  
-```
-  
-Now we want to insert the data of the cities, but hierarchically as a sub-table.  
-Example of CityDataTable for Slovenia:  
-
-```QVS20
-[City][MetropolitanPopulation]  
-[Ljubljana][300000]  
-[Koper][30000]  
-```
-
-Together table and sub-table looks like this:  
-The sub-table row delimiter is changed to "1".  
-For easy parsing, the sub-table starts with the new row delimiter.  
-  
-```QVS20
-[Country][CityDataSubTable][Population]  
-[Slovenia][1[Ljubljana][300000]1[Koper][30000]1][2000000]  
-[Italia][1[Milano][400000]1[Venezia][30000]1][60000]  
-```
-
-This is not very human readable, because the lack of spaces.  
-But you can visualize it like this:  
-  
-```QVS20
-[Country ] [CityDataSubTable      ] [Population]  
-[Slovenia] [1[Ljubljana][300000]1  
-             [Koper    ][ 30000]1 ] [   2000000]  
-[Italia  ] [1[Milano   ][400000]1  
-             [Venezia  ][ 30000]1 ] [  60000000]  
-...  
-```
-  
-## Row delimiter LF and sub-tables  
-  
-The basic row delimiter is LF. Not CR, not CRLF, but exactly LF.  
-Every row must end with the row delimiter, especially the last row .  
-There is a small performance problem with sub-tables here.  
-Let me explain and come to the solution with this flow of thoughts.  
-For sequential reading of `QVS20` files the inserted sub-tables are not a problem. It works well.  
-If we read every field sequentially, we know when the sub-table starts and ends. Easy.
-But sometimes we want to go very fast line by line and read only the first field for filtering. Because of sub-tables, the next LF is not always the start of a new row.  
-**Let's solve this problem.**  
-We can use again the fact that we know the different start and end delimiters.  
-So between the end field and the new row we can put a different `row delimiter`.  
-The first level row delimiter is conveniently LF.  
-For the first sub-table the row delimiter changes to the string `1`.  
-For the next depth level `2` and so on. The number is the depth of the sub-table.  
-In any moment it will be clear what is the row delimiter for that explicit sub-table.  
-Very important rule: every row, and the last row especially, must end with a row delimiter !  
-We must take care to limit the row delimiter to only one byte. It means there cannot be a sub-table nested deeper than 9 levels.  And that is fine for this type of tabular format.  
-
 ## Schema  
   
 The Schema is write always in 5 mandatory rows:  
 
 - 1st row - file type, table name and description  
 - 2st row - data types  
-- 3nd row - sub table schemas  
+- 3nd row - for future use  
 - 4nd row - additional data  
 - 5rd row - column names  
 
@@ -395,7 +328,6 @@ There are 3 possible file types for qvs20:
 1. only schema - is marked with [S]
 2. only rows - is marked with [R]
 3. full (schema+rows) - is marked with [T]
-4. sub_table schema - is marked with [U], but it cannot be a standalone file
 
 The marker helps the parser to early recognize the file and its content.  
 The table name is short and is used to assert that the separate TableRows file and the TableSchema file are really from the same Table.  
@@ -408,13 +340,12 @@ For example the strings must be unescaped, but the integers don't need it.
 Example of the 2nd row with data type:  
   
 ```QVS20
-[String][Integer][Decimal][Float][Date][Time][DateTime][Bool][SubTable]  
+[String][Integer][Decimal][Float][Date][Time][DateTime][Bool]  
 ```
 
-### Schema 3rd row - Sub table schemas  
+### Schema 3rd row - for future use  
 
-SubTables schemas are write in the 3rd row.  
-For other column, the field is empty [].  
+For all column, the field is empty [].  
 
 ### Schema 4th row - Additional data  
   
@@ -445,7 +376,6 @@ There are 3 possible file types for qvs20:
 1. only schema - is marked with [S]
 2. only rows - is marked with [R]
 3. full (schema+rows) - is marked with [T]
-4. sub_table schema - is marked with [U], but it cannot be a standalone file
 
 The marker helps the parser to early recognize the file and its content.  
 When TableRows are in separate file, the first row contains only file type and table name. No need for description here, because is already in the schema.  
@@ -493,3 +423,4 @@ So I cannot include the specific information that are not common to all 3 purpos
 - DEVELOPMENT.md - information and instruction for development
 - CHANGELOG.md - what changed between versions
 - TODO.md - reminder of what is in plan to do
+# wsl_open_vscode
