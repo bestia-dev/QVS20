@@ -95,7 +95,7 @@ ssh-add ~/.ssh/my_key
 ssh-add -l
 
 # clone or pull new commits
-clear; git clone git@github.com:LucianoBestia/QVS20.git
+clear; git clone git@github.com:bestia-dev/QVS20.git
 clear; git pull
 
 # locally always start development with a clear short term goal
