@@ -1,6 +1,6 @@
 [comment]: # (lmake_md_to_doc_comments segment start A)
 
-**Modern replacement for csv for the year 2020**
+*QVS20*
 
 [comment]: # (lmake_readme cargo.toml data start)
 
