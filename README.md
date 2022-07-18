@@ -1,8 +1,6 @@
 [comment]: # (lmake_md_to_doc_comments segment start A)
 
-# QVS20 - Modern replacement for csv for the year 2020  
-
-**sQuare brackets Separated Values 2020**
+**Modern replacement for csv for the year 2020**
 
 [comment]: # (lmake_readme cargo.toml data start)
 
