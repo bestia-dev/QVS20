@@ -22,7 +22,7 @@
 [![Documentation](https://docs.rs/qvs20/badge.svg)](https://docs.rs/qvs20/)
 [![crev reviews](https://web.crev.dev/rust-reviews/badge/crev_count/qvs20.svg)](https://web.crev.dev/rust-reviews/crate/qvs20/)[![Lib.rs](https://img.shields.io/badge/Lib.rs-rust-orange.svg)](https://lib.rs/crates/qvs20/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/LucianoBestia/qvs20/blob/master/LICENSE)
-![Hits](https://bestia.dev/webpage_hit_counter/get_svg_image/607819758)
+![Hits](https://bestia.dev/webpage_hit_counter/get_svg_image/607819758.svg)
 
 Hashtags: #rustlang #tutorial
 My projects on Github are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).
