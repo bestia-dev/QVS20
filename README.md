@@ -418,6 +418,20 @@ Integration in database tools, spreadsheet apps and client-server frameworks wou
 It is really important for the standard to be popular.  
 I hope the standard will be interesting to many and they will organically spread the word.  
 
+## Open-source and free as a beer
+
+My open-source projects are free as a beer (MIT license).  
+I just love programming.  
+But I need also to drink. If you find my projects and tutorials helpful, please buy me a beer by donating to my [PayPal](https://paypal.me/LucianoBestia).  
+You know the price of a beer in your local bar ;-)  
+So I can drink a free beer for your health :-)  
+[Na zdravje!](https://translate.google.com/?hl=en&sl=sl&tl=en&text=Na%20zdravje&op=translate) [Alla salute!](https://dictionary.cambridge.org/dictionary/italian-english/alla-salute) [Prost!](https://dictionary.cambridge.org/dictionary/german-english/prost) [Nazdravlje!](https://matadornetwork.com/nights/how-to-say-cheers-in-50-languages/) 🍻
+
+[//bestia.dev](https://bestia.dev)  
+[//github.com/bestia-dev](https://github.com/bestia-dev)  
+[//bestiadev.substack.com](https://bestiadev.substack.com)  
+[//youtube.com/@bestia-dev-tutorials](https://youtube.com/@bestia-dev-tutorials)  
+
 [comment]: # (lmake_md_to_doc_comments segment end A)
 
 ## Read also the separate XXX.md files
@@ -428,4 +442,6 @@ So I cannot include the specific information that are not common to all 3 purpos
 - DEVELOPMENT.md - information and instruction for development
 - CHANGELOG.md - what changed between versions
 - TODO.md - reminder of what is in plan to do
-# wsl_open_vscode
+
+
+
