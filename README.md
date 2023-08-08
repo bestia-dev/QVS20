@@ -7,6 +7,11 @@
 **Modern replacement for csv for the year 2020**  
 ***version: 0.0.8  date: 2020-07-16 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/qvs20)***  
 
+![status](https://img.shields.io/badge/experimental-red) 
+![status](https://img.shields.io/badge/obsolete-red) 
+![status](https://img.shields.io/badge/not_in_use-red) 
+![status](https://img.shields.io/badge/archived-yellow) 
+
 [comment]: # (lmake_readme cargo.toml data end)
 
 [comment]: # (lmake_lines_of_code start)
